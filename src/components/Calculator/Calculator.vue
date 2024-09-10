@@ -71,15 +71,23 @@
         </thead>
         <tbody>
           <tr v-for="(sizes, index) in sizeRows" :key="index">
-            <td><input class="table-input" type="number" v-model="sizes.s" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.m" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.l" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.xl" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.xxl" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.xxxl" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.xxxxl" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" /></td>
-            <td><input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" /></td>
+            <template v-if="index === 11 || index === 12">
+              <td colspan="9">
+                <input class="table-input" type="number" v-model="sizes.s" min="0"  />
+              </td>
+            </template>
+
+            <template v-else>
+              <td><input class="table-input" type="number" v-model="sizes.s" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.m" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.l" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.xl" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.xxl" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.xxxl" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.xxxxl" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" /></td>
+              <td><input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" /></td>
+            </template>
           </tr>
         </tbody>
       </table>
