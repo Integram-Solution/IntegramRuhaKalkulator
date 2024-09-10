@@ -55,7 +55,7 @@
         </tbody>
       </table>
 
-      <table class="w-full table-fixed mt-6" id="meretTabla">
+      <table class="w-fit table-fixed mt-6" id="meretTabla">
         <thead>
           <tr>
             <th>S</th>
@@ -92,18 +92,24 @@
         </tbody>
       </table>
 
-      <table class="w-20">
+      <table class="w-full" id="osszegTabla">
         <tr>
-          <td>Nettó</td>
+          <td></td>
+          <td></td>
+          <td><strong>Nettó</strong></td>
           <td><strong>{{ calculateGrandTotal() }} Ft</strong></td>
         </tr>
         <tr>
-          <td>Áfa</td>
           <td></td>
+          <td></td>
+          <td>Áfa</td>
+          <td>{{ calculateVAT() }} Ft</td>
         </tr>
         <tr>
-          <td>Total</td>
           <td></td>
+          <td></td>
+          <td>Total</td>
+          <td>{{ calculateTotalWithVAT() }} Ft</td>
         </tr>
       </table>
 
@@ -187,7 +193,18 @@ export default {
       return this.products.reduce((total, product, index) => {
         return total + this.calculateTotalPrice(index);
       }, 0);
-    }
+    },
+    calculateVAT() {
+  const vat = this.calculateGrandTotal() * 0.27;
+  return this.roundToNearestFive(vat);
+},
+
+roundToNearestFive(value) {
+  return Math.round(value / 5) * 5;
+},
+    calculateTotalWithVAT() {
+      return this.calculateGrandTotal() + this.calculateVAT();
+    },
   },
   mounted() {
     for (let i = 39; i <= 50; i++) {
@@ -255,5 +272,9 @@ table input[type="number"]::-webkit-outer-spin-button,
 table input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+#osszegTabla td:empty {
+  border: none;
 }
 </style>
