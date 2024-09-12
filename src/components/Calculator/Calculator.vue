@@ -3,126 +3,206 @@
     <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1">
       <div>
         <label for="nev">Név</label><br />
-        <input class="border 1px black" type="text" name="nev" id="nev" />
+        <input class="border" type="text" name="nev" id="nev" />
       </div>
       <div>
         <label for="tel">Telefonszám</label><br />
-        <input class="border 1px black" type="tel" name="tel" id="tel" />
+        <input class="border" type="tel" name="tel" id="tel" />
       </div>
       <div>
         <label for="email">E-mail</label><br />
-        <input class="border 1px black" type="text" name="email" id="email" />
+        <input class="border" type="email" name="email" id="email" />
       </div>
       <div>
         <label for="cegnev">Cégnév</label><br />
-        <input class="border 1px black" type="text" name="cegnev" id="cegnev" />
+        <input class="border" type="text" name="cegnev" id="cegnev" />
       </div>
       <div>
         <label for="varos">Város</label><br />
-        <input class="border 1px black" type="text" name="varos" id="varos" />
+        <input class="border" type="text" name="varos" id="varos" />
       </div>
       <div>
         <label for="cim">Cím</label><br />
-        <input class="border 1px black" type="text" name="cim" id="cim" />
+        <input class="border" type="text" name="cim" id="cim" />
       </div>
       <div>
         <label for="ado">Adószám</label><br />
-        <input class="border 1px black" type="text" name="ado" id="ado" />
+        <input class="border" type="text" name="ado" id="ado" />
       </div>
     </div>
 
     <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-      <table class="mt-6">
-        <thead>
-          <tr>
-            <th>Termék</th>
-            <th>Egységár</th>
-            <th>db</th>
-            <th>Összesen</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(product, index) in products" :key="index">
-            <td>
-              <input type="text" v-model="product.name"  class="table-input" />
-            </td>
-            <td>
-              <input type="number" v-model="product.unitPrice" min="0" class="table-input" />
-            </td>
-            <td>{{ calculateTotalQuantity(index) }}</td>
-            <td>{{ calculateTotalPrice(index) }} Ft</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="w-fit table-fixed mt-6" id="meretTabla">
-        <thead>
-          <tr>
-            <th>S</th>
-            <th>M</th>
-            <th>L</th>
-            <th>XL</th>
-            <th>2XL</th>
-            <th>3XL</th>
-            <th>4XL</th>
-            <th>5XL</th>
-            <th>6XL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(sizes, index) in sizeRows" :key="index">
-            <template v-if="index === 11 || index === 12">
-              <td colspan="9">
-                <input class="table-input" type="number" v-model="sizes.s" min="0"  />
+      <div>
+        <table class="elsotablak mt-6" id="seged">
+          <thead>
+            <tr>
+              <th>Termék</th>
+              <th>Egységár</th>
+              <th>db</th>
+              <th>Összesen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(product, index) in products" :key="index">
+              <td >
+                <input type="text" v-model="product.name" class="table-input" />
               </td>
-            </template>
+              <td class="w-20">
+                <input
+                  type="number"
+                  v-model="product.unitPrice"
+                  min="0"
+                  class="table-input"
+                />
+              </td>
+              <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
+              <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
+            </tr>
+          </tbody>
+        </table>
 
-            <template v-else>
-              <td><input class="table-input" type="number" v-model="sizes.s" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.m" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.l" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.xl" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.xxl" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.xxxl" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.xxxxl" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" /></td>
-              <td><input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" /></td>
-            </template>
+        <table class="elsotablak w-full mt-5" id="osszegTabla">
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="w-12"><strong>Nettó</strong></td>
+            <td class="w-20" >
+              <strong>{{ calculateGrandTotal() }} Ft</strong>
+            </td>
           </tr>
-        </tbody>
-      </table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Áfa</td>
+            <td>{{ calculateVAT() }} Ft</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td>{{ calculateTotalWithVAT() }} Ft</td>
+          </tr>
+        </table>
+      </div>
 
-      <table class="w-full" id="osszegTabla">
-        <tr>
-          <td></td>
-          <td></td>
-          <td><strong>Nettó</strong></td>
-          <td><strong>{{ calculateGrandTotal() }} Ft</strong></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td>Áfa</td>
-          <td>{{ calculateVAT() }} Ft</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td>Total</td>
-          <td>{{ calculateTotalWithVAT() }} Ft</td>
-        </tr>
-      </table>
+      <div>
+        <table class="masodiktablak w-fit mt-6" id="meretTabla">
+          <thead>
+            <tr>
+              <th>S</th>
+              <th>M</th>
+              <th>L</th>
+              <th>XL</th>
+              <th>2XL</th>
+              <th>3XL</th>
+              <th>4XL</th>
+              <th>5XL</th>
+              <th>6XL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(sizes, index) in sizeRows" :key="index">
+              <template v-if="index === 11 || index === 12">
+                <td colspan="9">
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.s"
+                    min="0"
+                  />
+                </td>
+              </template>
 
-      <table class="w-full" id="kisMeretTabla">
-        <tr>
-          <td v-for="number in numbers" :key="number">{{ number }}</td>
-        </tr>
-        <tr>
-          <td v-for="number in numbers2" :key="number">{{ number }}</td>
-        </tr>
-      </table>
+              <template v-else>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.s"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.m"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.l"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xl"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxl"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxl"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxxl"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxxxl"
+                    min="0"
+                  />
+                </td>
+                <td>
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxxxxl"
+                    min="0"
+                  />
+                </td>
+              </template>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="masodiktablak w-full mt-5" id="kisMeretTabla">
+          <tr>
+            <td v-for="number in numbers" :key="number">{{ number }}</td>
+          </tr>
+          <tr>
+            <td v-for="number in numbers2" :key="number">{{ number }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <button >PDF letöltése</button>
+
+    <button class="mt-5 mx-auto">PDF letöltése</button>
   </div>
 </template>
 
@@ -133,40 +213,189 @@ export default {
       numbers: [],
       numbers2: [],
       products: [
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: '', unitPrice: null },
-        { name: 'Ing', unitPrice: null },
-        { name: 'Cipő', unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "", unitPrice: null },
+        { name: "Ing", unitPrice: null },
+        { name: "Cipő", unitPrice: null },
       ],
       sizeRows: [
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-        { s: "", m: "", l: "", xl: "", xxl: "", xxxl: "", xxxxl: "", xxxxxl: "", xxxxxxl: "" },
-      ]
-
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+        {
+          s: "",
+          m: "",
+          l: "",
+          xl: "",
+          xxl: "",
+          xxxl: "",
+          xxxxl: "",
+          xxxxxl: "",
+          xxxxxxl: "",
+        },
+      ],
     };
   },
   methods: {
@@ -195,13 +424,13 @@ export default {
       }, 0);
     },
     calculateVAT() {
-  const vat = this.calculateGrandTotal() * 0.27;
-  return this.roundToNearestFive(vat);
-},
+      const vat = this.calculateGrandTotal() * 0.27;
+      return this.roundToNearestFive(vat);
+    },
 
-roundToNearestFive(value) {
-  return Math.round(value / 5) * 5;
-},
+    roundToNearestFive(value) {
+      return Math.round(value / 5) * 5;
+    },
     calculateTotalWithVAT() {
       return this.calculateGrandTotal() + this.calculateVAT();
     },
@@ -221,19 +450,60 @@ roundToNearestFive(value) {
 
 <style scoped>
 .calculator-container {
-  @apply flex bg-white sm:w-8/12 w-11/12 h-auto mx-auto rounded-xl p-8;
+  @apply flex bg-white sm:w-8/12 w-11/12 h-auto mx-auto rounded-xl sm:p-8 p-2;
   margin-top: 10vh;
 }
 
+.elsotablak td{
+  border: 1px solid gray;
+  border-radius: 15px;
+}
+
+.elsotablak th {
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.elsotablak  td:nth-child(1) {
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.masodiktablak td
+{
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.masodiktablak th {
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #4BB543;
+  border-radius: 15px;
+  width: fit-content;
+  padding: 0 5px 0 5px;
+}
+
+#osszegTabla tr td:nth-child(3) {
+  border: solid 1px black ;
+}
+
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 3px;
   text-align: center;
   font-size: small;
+  table-layout: fixed;
 }
-th,
-td {
-  border: 1px solid black;
+
+#seged {
+  width: 100%;
+  table-layout: auto;
 }
+
 thead {
   font-size: small;
 }
@@ -253,9 +523,20 @@ thead {
   background-color: lightgray;
 }
 
-input {
-  text-align: center;
+#kisMeretTabla td {
+  border: 1px solid black
 }
+
+.elsotablak input {
+  text-align: center;
+  border-radius: 15px;
+}
+
+.masodiktablak input {
+  text-align: center;
+  border-radius: 5px;
+}
+
 .table-input {
   width: 100%;
   height: 100%;
