@@ -48,7 +48,7 @@
                 <input type="text" v-model="product.name" class="table-input" />
               </td>
               <td class="w-20">
-                <input type="number" v-model="product.number.unitPrice" min="0" class="table-input" />
+                <input type="number" v-model.number="product.unitPrice" min="0" class="table-input" />
               </td>
               <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
               <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
