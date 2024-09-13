@@ -44,16 +44,11 @@
           </thead>
           <tbody>
             <tr v-for="(product, index) in products" :key="index">
-              <td >
+              <td>
                 <input type="text" v-model="product.name" class="table-input" />
               </td>
               <td class="w-20">
-                <input
-                  type="number"
-                  v-model="product.unitPrice"
-                  min="0"
-                  class="table-input"
-                />
+                <input type="number" v-model="product.number.unitPrice" min="0" class="table-input" />
               </td>
               <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
               <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
@@ -66,7 +61,7 @@
             <td></td>
             <td></td>
             <td class="w-12"><strong>Nettó</strong></td>
-            <td class="w-20" >
+            <td class="w-20">
               <strong>{{ calculateGrandTotal() }} Ft</strong>
             </td>
           </tr>
@@ -104,87 +99,37 @@
             <tr v-for="(sizes, index) in sizeRows" :key="index">
               <template v-if="index === 11 || index === 12">
                 <td colspan="9">
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.s"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
                 </td>
               </template>
 
               <template v-else>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.s"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.m"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.m" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.l"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.l" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.xl"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.xl" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.xxl"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.xxl" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.xxxl"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.xxxl" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.xxxxl"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.xxxxl" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.xxxxxl"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" />
                 </td>
                 <td>
-                  <input
-                    class="table-input"
-                    type="number"
-                    v-model="sizes.xxxxxxl"
-                    min="0"
-                  />
+                  <input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" />
                 </td>
               </template>
             </tr>
@@ -454,7 +399,7 @@ export default {
   margin-top: 10vh;
 }
 
-.elsotablak td{
+.elsotablak td {
   border: 1px solid gray;
   border-radius: 15px;
 }
@@ -464,13 +409,12 @@ export default {
   border-radius: 15px;
 }
 
-.elsotablak  td:nth-child(1) {
+.elsotablak td:nth-child(1) {
   border: 1px solid black;
   border-radius: 15px;
 }
 
-.masodiktablak td
-{
+.masodiktablak td {
   border: 1px solid grey;
   border-radius: 5px;
 }
@@ -488,7 +432,7 @@ button {
 }
 
 #osszegTabla tr td:nth-child(3) {
-  border: solid 1px black ;
+  border: solid 1px black;
 }
 
 table {
@@ -507,6 +451,7 @@ table {
 thead {
   font-size: small;
 }
+
 #meretTabla tbody tr:nth-child(14) input {
   background-color: skyblue;
 }
