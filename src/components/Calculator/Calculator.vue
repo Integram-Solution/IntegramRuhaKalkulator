@@ -1,5 +1,5 @@
 <template>
-  <div class="calculator-container flex flex-col">
+  <div id="element-to-convert" class="calculator-container flex flex-col">
     <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1">
       <div>
         <label for="nev">Név</label><br />
@@ -146,12 +146,13 @@
         </table>
       </div>
     </div>
-
+    <button @click="exportToPDF">Export to PDF</button>
     <button class="mt-5 mx-auto">PDF letöltése</button>
   </div>
 </template>
 
 <script>
+import html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
@@ -378,6 +379,13 @@ export default {
     },
     calculateTotalWithVAT() {
       return this.calculateGrandTotal() + this.calculateVAT();
+    },
+    exportToPDF() {
+      html2pdf(document.getElementById("element-to-convert"), {
+        margin: 0,
+        filename: "integram-ruha.pdf",
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+      });
     },
   },
   mounted() {
