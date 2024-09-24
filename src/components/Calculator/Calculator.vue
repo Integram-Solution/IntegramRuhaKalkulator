@@ -1,5 +1,5 @@
 <template>
-  <div id="element-to-convert" class="calculator-container flex flex-col">
+  <div class="calculator-container flex flex-col">
     <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1">
       <div>
         <label for="nev">Név</label><br />
@@ -31,123 +31,187 @@
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-      <div>
-        <table class="elsotablak mt-6" id="seged">
-          <thead>
-            <tr>
-              <th>Termék</th>
-              <th>Egységár</th>
-              <th>db</th>
-              <th>Összesen</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(product, index) in products" :key="index">
-              <td>
-                <input type="text" v-model="product.name" class="table-input" />
-              </td>
-              <td class="w-20">
-                <input type="number" v-model.number="product.unitPrice" min="0" class="table-input" />
-              </td>
-              <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-              <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <table class="elsotablak w-full mt-5" id="osszegTabla">
-          <tr>
-            <td></td>
-            <td></td>
-            <td class="w-12"><strong>Nettó</strong></td>
-            <td class="w-20">
-              <strong>{{ calculateGrandTotal() }} Ft</strong>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td>Áfa</td>
-            <td>{{ calculateVAT() }} Ft</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td>Total</td>
-            <td>{{ calculateTotalWithVAT() }} Ft</td>
-          </tr>
-        </table>
+    <div id="element-to-convert">
+      <div id="form-data" class="flex-container">
+        <div class="left-column">
+          <!-- Bal oldali adatok -->
+        </div>
+        <div class="right-column">
+          <!-- Jobb oldali adatok -->
+        </div>
       </div>
-
-      <div>
-        <table class="masodiktablak w-fit mt-6" id="meretTabla">
-          <thead>
+      <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+        <div>
+          <table class="elsotablak mt-6" id="seged">
+            <thead>
+              <tr>
+                <th>Termék</th>
+                <th>Egységár</th>
+                <th>db</th>
+                <th>Összesen</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(product, index) in products" :key="index">
+                <td>
+                  <input
+                    type="text"
+                    v-model="product.name"
+                    class="table-input"
+                  />
+                </td>
+                <td class="w-20">
+                  <input
+                    type="number"
+                    v-model.number="product.unitPrice"
+                    min="0"
+                    class="table-input"
+                  />
+                </td>
+                <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
+                <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="elsotablak w-full mt-5" id="osszegTabla">
             <tr>
-              <th>S</th>
-              <th>M</th>
-              <th>L</th>
-              <th>XL</th>
-              <th>2XL</th>
-              <th>3XL</th>
-              <th>4XL</th>
-              <th>5XL</th>
-              <th>6XL</th>
+              <td></td>
+              <td></td>
+              <td class="w-12"><strong>Nettó</strong></td>
+              <td class="w-20">
+                <strong>{{ calculateGrandTotal() }} Ft</strong>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(sizes, index) in sizeRows" :key="index">
-              <template v-if="index === 11 || index === 12">
-                <td colspan="9">
-                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
-                </td>
-              </template>
-
-              <template v-else>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.m" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.l" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.xl" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.xxl" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxl" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxxl" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" />
-                </td>
-                <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" />
-                </td>
-              </template>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Áfa</td>
+              <td>{{ calculateVAT() }} Ft</td>
             </tr>
-          </tbody>
-        </table>
-
-        <table class="masodiktablak w-full mt-5" id="kisMeretTabla">
-          <tr>
-            <td v-for="number in numbers" :key="number">{{ number }}</td>
-          </tr>
-          <tr>
-            <td v-for="number in numbers2" :key="number">{{ number }}</td>
-          </tr>
-        </table>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Total</td>
+              <td>{{ calculateTotalWithVAT() }} Ft</td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <table class="masodiktablak w-fit mt-6" id="meretTabla">
+            <thead>
+              <tr>
+                <th>S</th>
+                <th>M</th>
+                <th>L</th>
+                <th>XL</th>
+                <th>2XL</th>
+                <th>3XL</th>
+                <th>4XL</th>
+                <th>5XL</th>
+                <th>6XL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(sizes, index) in sizeRows" :key="index">
+                <template v-if="index === 11 || index === 12">
+                  <td colspan="9">
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.s"
+                      min="0"
+                    />
+                  </td>
+                </template>
+                <template v-else>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.s"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.m"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.l"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xl"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxl"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxl"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxxl"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxxxl"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxxxxl"
+                      min="0"
+                    />
+                  </td>
+                </template>
+              </tr>
+            </tbody>
+          </table>
+          <table class="masodiktablak w-full mt-5" id="kisMeretTabla">
+            <tr>
+              <td v-for="number in numbers" :key="number">{{ number }}</td>
+            </tr>
+            <tr>
+              <td v-for="number in numbers2" :key="number">{{ number }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
-    <button @click="exportToPDF">Export to PDF</button>
-    <button class="mt-5 mx-auto">PDF letöltése</button>
+    <button class="mt-5 mx-auto" @click="exportToPDF">PDF letöltése</button>
   </div>
 </template>
 
@@ -381,10 +445,27 @@ export default {
       return this.calculateGrandTotal() + this.calculateVAT();
     },
     exportToPDF() {
+      const nev = document.getElementById("nev").value;
+      const email = document.getElementById("email").value;
+      const tel = document.getElementById("tel").value;
+      const cegnev = document.getElementById("cegnev").value;
+      const varos = document.getElementById("varos").value;
+      const cim = document.getElementById("cim").value;
+      const ado = document.getElementById("ado").value;
+
+      const rightColumnData = `<p>Név: ${nev}</p><p>Email: ${email}</p><p>Telefonszám: ${tel}</p>`;
+
+      const leftColumnData = `<p>Cégnév: ${cegnev}</p><p>Város: ${varos}</p><p>Cím: ${cim}</p><p>Adószám: ${ado}</p>`;
+
+      document.querySelector(".left-column").innerHTML = leftColumnData;
+      document.querySelector(".right-column").innerHTML = rightColumnData;
       html2pdf(document.getElementById("element-to-convert"), {
-        margin: 0,
+        margin: 1,
         filename: "integram-ruha.pdf",
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+        html2canvas: { scale: 2 },
+      }).then(() => {
+        document.getElementById("form-data").innerHTML = "";
       });
     },
   },
@@ -402,9 +483,16 @@ export default {
 </script>
 
 <style scoped>
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  font-family: Helvetica;
+}
+
 .calculator-container {
   @apply flex bg-white sm:w-8/12 w-11/12 h-auto mx-auto rounded-xl sm:p-8 p-2;
   margin-top: 10vh;
+  font-family: Helvetica;
 }
 
 .elsotablak td {
@@ -433,7 +521,7 @@ export default {
 }
 
 button {
-  background-color: #4BB543;
+  background-color: #4bb543;
   border-radius: 15px;
   width: fit-content;
   padding: 0 5px 0 5px;
@@ -449,6 +537,7 @@ table {
   text-align: center;
   font-size: small;
   table-layout: fixed;
+  font-family: Helvetica;
 }
 
 #seged {
@@ -477,7 +566,7 @@ thead {
 }
 
 #kisMeretTabla td {
-  border: 1px solid black
+  border: 1px solid black;
 }
 
 .elsotablak input {
