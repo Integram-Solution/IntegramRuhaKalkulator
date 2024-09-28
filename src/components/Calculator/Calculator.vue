@@ -62,14 +62,14 @@
                 </td>
                 <td class="w-20">
                   <input
-                    type="number"
-                    v-model.number="product.unitPrice"
-                    min="0"
+                    type="text"
+                    :value="formatPriceWithFt(product.unitPrice)"
+                    @input="updatePrice($event, index)"
                     class="table-input"
                   />
                 </td>
                 <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-                <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
+                <td class="w-20">{{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft</td>
               </tr>
             </tbody>
           </table>
@@ -79,20 +79,20 @@
               <td></td>
               <td class="w-12"><strong>Nettó</strong></td>
               <td class="w-20">
-                <strong>{{ calculateGrandTotal() }} Ft</strong>
+                <strong>{{ formatNumberWithSeparator(calculateGrandTotal()) }} Ft</strong>
               </td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td>Áfa</td>
-              <td>{{ calculateVAT() }} Ft</td>
+              <td>{{ formatNumberWithSeparator(calculateVAT()) }} Ft</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td>Total</td>
-              <td>{{ calculateTotalWithVAT() }} Ft</td>
+              <td>{{ formatNumberWithSeparator(calculateTotalWithVAT()) }} Ft</td>
             </tr>
           </table>
         </div>
@@ -409,6 +409,23 @@ export default {
     };
   },
   methods: {
+    formatPriceWithFt(value) {
+      if (!value) return "";
+      const number = parseFloat(value);
+
+      return number.toLocaleString("hu-HU") + " Ft";
+    },
+    updatePrice(event, index) {
+      const rawValue = event.target.value
+        .replace(/\./g, "")
+        .replace(/,/g, ".")
+        .replace(" Ft", "");
+      if (!isNaN(rawValue) && rawValue !== "") {
+        this.products[index].unitPrice = parseFloat(rawValue);
+      } else {
+        this.products[index].unitPrice = 0;
+      }
+    },
     calculateTotalQuantity(index) {
       const sizes = this.sizeRows[index];
       return (
@@ -436,6 +453,9 @@ export default {
     calculateVAT() {
       const vat = this.calculateGrandTotal() * 0.27;
       return this.roundToNearestFive(vat);
+    },
+    formatNumberWithSeparator(value) {
+      return value.toLocaleString("hu-HU");
     },
 
     roundToNearestFive(value) {
