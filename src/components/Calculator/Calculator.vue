@@ -31,184 +31,119 @@
       </div>
     </div>
 
-    <div id="element-to-convert">
-      <div id="form-data" class="flex-container">
-        <div class="left-column">
-          <!-- Bal oldali adatok -->
-        </div>
-        <div class="right-column">
-          <!-- Jobb oldali adatok -->
-        </div>
-      </div>
-      <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-        <div>
-          <table class="elsotablak mt-6" id="seged">
-            <thead>
-              <tr>
-                <th>Termék</th>
-                <th>Egységár</th>
-                <th>db</th>
-                <th>Összesen</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(product, index) in products" :key="index">
-                <td>
-                  <input
-                    type="text"
-                    v-model="product.name"
-                    class="table-input"
-                  />
-                </td>
-                <td class="w-20">
-                  <input
-                    type="text"
-                    :value="formatPriceWithFt(product.unitPrice)"
-                    @input="updatePrice($event, index)"
-                    class="table-input"
-                  />
-                </td>
-                <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-                <td class="w-20">{{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="elsotablak w-full mt-5" id="osszegTabla">
+    <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+      <div>
+        <table class="elsotablak mt-6" id="seged">
+          <thead>
             <tr>
-              <td></td>
-              <td></td>
-              <td class="w-12"><strong>Nettó</strong></td>
-              <td class="w-20">
-                <strong>{{ formatNumberWithSeparator(calculateGrandTotal()) }} Ft</strong>
+              <th>Termék</th>
+              <th>Egységár</th>
+              <th>db</th>
+              <th>Összesen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(product, index) in products" :key="index">
+              <td>
+                <input type="text" v-model="product.name" class="table-input" />
               </td>
+              <td class="w-20">
+                <input type="number" v-model.number="product.unitPrice" min="0" class="table-input" />
+              </td>
+              <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
+              <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
             </tr>
+          </tbody>
+        </table>
+
+        <table class="elsotablak w-full mt-5" id="osszegTabla">
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="w-12"><strong>Nettó</strong></td>
+            <td class="w-20">
+              <strong>{{ calculateGrandTotal() }} Ft</strong>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Áfa</td>
+            <td>{{ calculateVAT() }} Ft</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td>{{ calculateTotalWithVAT() }} Ft</td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <table class="masodiktablak w-fit mt-6" id="meretTabla">
+          <thead>
             <tr>
-              <td></td>
-              <td></td>
-              <td>Áfa</td>
-              <td>{{ formatNumberWithSeparator(calculateVAT()) }} Ft</td>
+              <th>S</th>
+              <th>M</th>
+              <th>L</th>
+              <th>XL</th>
+              <th>2XL</th>
+              <th>3XL</th>
+              <th>4XL</th>
+              <th>5XL</th>
+              <th>6XL</th>
             </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td>Total</td>
-              <td>{{ formatNumberWithSeparator(calculateTotalWithVAT()) }} Ft</td>
+          </thead>
+          <tbody>
+            <tr v-for="(sizes, index) in sizeRows" :key="index">
+              <template v-if="index === 11 || index === 12">
+                <td colspan="9">
+                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
+                </td>
+              </template>
+
+              <template v-else>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.m" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.l" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.xl" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.xxl" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.xxxl" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.xxxxl" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" />
+                </td>
+                <td>
+                  <input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" />
+                </td>
+              </template>
             </tr>
-          </table>
-        </div>
-        <div>
-          <table class="masodiktablak w-fit mt-6" id="meretTabla">
-            <thead>
-              <tr>
-                <th>S</th>
-                <th>M</th>
-                <th>L</th>
-                <th>XL</th>
-                <th>2XL</th>
-                <th>3XL</th>
-                <th>4XL</th>
-                <th>5XL</th>
-                <th>6XL</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(sizes, index) in sizeRows" :key="index">
-                <template v-if="index === 11 || index === 12">
-                  <td colspan="9">
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.s"
-                      min="0"
-                    />
-                  </td>
-                </template>
-                <template v-else>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.s"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.m"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.l"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xl"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxl"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxl"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxxl"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxxxl"
-                      min="0"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxxxxl"
-                      min="0"
-                    />
-                  </td>
-                </template>
-              </tr>
-            </tbody>
-          </table>
-          <table class="masodiktablak w-full mt-5" id="kisMeretTabla">
-            <tr>
-              <td v-for="number in numbers" :key="number">{{ number }}</td>
-            </tr>
-            <tr>
-              <td v-for="number in numbers2" :key="number">{{ number }}</td>
-            </tr>
-          </table>
-        </div>
+          </tbody>
+        </table>
+
+        <table class="masodiktablak w-full mt-5" id="kisMeretTabla">
+          <tr>
+            <td v-for="number in numbers" :key="number">{{ number }}</td>
+          </tr>
+          <tr>
+            <td v-for="number in numbers2" :key="number">{{ number }}</td>
+          </tr>
+        </table>
       </div>
     </div>
     <button class="mt-5 mx-auto" @click="exportToPDF">PDF letöltése</button>
@@ -480,12 +415,11 @@ export default {
       document.querySelector(".left-column").innerHTML = leftColumnData;
       document.querySelector(".right-column").innerHTML = rightColumnData;
       html2pdf(document.getElementById("element-to-convert"), {
-        margin: 1,
-        filename: "integram-ruha.pdf",
-        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+        margin: 0,
+        filename: "integram-ruha-" + Date.now() + ".pdf",
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
-      }).then(() => {
-        document.getElementById("form-data").innerHTML = "";
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
       });
     },
   },
