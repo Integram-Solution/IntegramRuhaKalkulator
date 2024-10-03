@@ -54,22 +54,18 @@
             <tbody>
               <tr v-for="(product, index) in products" :key="index">
                 <td>
-                  <input
-                    type="text"
-                    v-model="product.name"
-                    class="table-input"
-                  />
-                </td>
-                <td class="w-20">
-                  <input
-                    type="number"
-                    v-model.number="product.unitPrice"
-                    min="0"
-                    class="table-input"
-                  />
-                </td>
+                <input type="text" v-model="product.name" class="table-input" />
+              </td>
+              <td class="w-20">
+                <input
+                  type="text"
+                  :value="formatPriceWithFt(product.unitPrice)"
+                  @input="updatePrice($event, index)"
+                  class="table-input"
+                />
+              </td>
                 <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-                <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
+                <td class="w-20">{{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft</td>
               </tr>
             </tbody>
           </table>
@@ -79,20 +75,24 @@
               <td></td>
               <td class="w-12"><strong>Nettó</strong></td>
               <td class="w-20">
-                <strong>{{ calculateGrandTotal() }} Ft</strong>
+                <strong
+                >{{
+                  formatNumberWithSeparator(calculateGrandTotal())
+                }}
+                Ft</strong>
               </td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td>Áfa</td>
-              <td>{{ calculateVAT() }} Ft</td>
+              <td>{{ formatNumberWithSeparator(calculateVAT()) }} Ft</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td>Total</td>
-              <td>{{ calculateTotalWithVAT() }} Ft</td>
+              <td>{{ formatNumberWithSeparator(calculateTotalWithVAT()) }} Ft</td>
             </tr>
           </table>
         </div>
@@ -487,7 +487,7 @@ export default {
         jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
       }).then(() => {
         document.getElementById("form-data").innerHTML = "";
-      });;
+      });
     },
   },
   mounted() {
