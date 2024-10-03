@@ -48,10 +48,17 @@
                 <input type="text" v-model="product.name" class="table-input" />
               </td>
               <td class="w-20">
-                <input type="number" v-model.number="product.unitPrice" min="0" class="table-input" />
+                <input
+                  type="text"
+                  :value="formatPriceWithFt(product.unitPrice)"
+                  @input="updatePrice($event, index)"
+                  class="table-input"
+                />
               </td>
               <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-              <td class="w-20">{{ calculateTotalPrice(index) }} Ft</td>
+              <td class="w-20">
+                {{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft
+              </td>
             </tr>
           </tbody>
         </table>
@@ -62,20 +69,25 @@
             <td></td>
             <td class="w-12"><strong>Nettó</strong></td>
             <td class="w-20">
-              <strong>{{ calculateGrandTotal() }} Ft</strong>
+              <strong
+                >{{
+                  formatNumberWithSeparator(calculateGrandTotal())
+                }}
+                Ft</strong
+              >
             </td>
           </tr>
           <tr>
             <td></td>
             <td></td>
             <td>Áfa</td>
-            <td>{{ calculateVAT() }} Ft</td>
+            <td>{{ formatNumberWithSeparator(calculateVAT()) }} Ft</td>
           </tr>
           <tr>
             <td></td>
             <td></td>
             <td>Total</td>
-            <td>{{ calculateTotalWithVAT() }} Ft</td>
+            <td>{{ formatNumberWithSeparator(calculateTotalWithVAT()) }} Ft</td>
           </tr>
         </table>
       </div>
@@ -99,37 +111,87 @@
             <tr v-for="(sizes, index) in sizeRows" :key="index">
               <template v-if="index === 11 || index === 12">
                 <td colspan="9">
-                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.s"
+                    min="0"
+                  />
                 </td>
               </template>
 
               <template v-else>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.s" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.s"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.m" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.m"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.l" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.l"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.xl" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xl"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.xxl" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxl"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxl" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxl"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxxl" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxxl"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxxxl" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxxxl"
+                    min="0"
+                  />
                 </td>
                 <td>
-                  <input class="table-input" type="number" v-model="sizes.xxxxxxl" min="0" />
+                  <input
+                    class="table-input"
+                    type="number"
+                    v-model="sizes.xxxxxxl"
+                    min="0"
+                  />
                 </td>
               </template>
             </tr>
@@ -417,9 +479,9 @@ export default {
       html2pdf(document.getElementById("element-to-convert"), {
         margin: 0,
         filename: "integram-ruha-" + Date.now() + ".pdf",
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
+        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
       });
     },
   },
