@@ -54,18 +54,24 @@
             <tbody>
               <tr v-for="(product, index) in products" :key="index">
                 <td>
-                <input type="text" v-model="product.name" class="table-input" />
-              </td>
-              <td class="w-20">
-                <input
-                  type="text"
-                  :value="formatPriceWithFt(product.unitPrice)"
-                  @input="updatePrice($event, index)"
-                  class="table-input"
-                />
-              </td>
+                  <input
+                    type="text"
+                    v-model="product.name"
+                    class="table-input"
+                  />
+                </td>
+                <td class="w-24">
+                  <input
+                    type="text"
+                    :value="formatPriceWithFt(product.unitPrice)"
+                    @input="updatePrice($event, index)"
+                    class="table-input"
+                  />
+                </td>
                 <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-                <td class="w-20">{{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft</td>
+                <td class="w-24">
+                  {{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft
+                </td>
               </tr>
             </tbody>
           </table>
@@ -73,13 +79,14 @@
             <tr>
               <td></td>
               <td></td>
-              <td class="w-12"><strong>Nettó</strong></td>
-              <td class="w-20">
+              <td class="w-24"><strong>Nettó</strong></td>
+              <td class="w-36">
                 <strong
-                >{{
-                  formatNumberWithSeparator(calculateGrandTotal())
-                }}
-                Ft</strong>
+                  >{{
+                    formatNumberWithSeparator(calculateGrandTotal())
+                  }}
+                  Ft</strong
+                >
               </td>
             </tr>
             <tr>
@@ -92,7 +99,9 @@
               <td></td>
               <td></td>
               <td>Total</td>
-              <td>{{ formatNumberWithSeparator(calculateTotalWithVAT()) }} Ft</td>
+              <td>
+                {{ formatNumberWithSeparator(calculateTotalWithVAT()) }} Ft
+              </td>
             </tr>
           </table>
         </div>
@@ -200,7 +209,7 @@
               </tr>
             </tbody>
           </table>
-          <table class="masodiktablak w-full mt-5" id="kisMeretTabla">
+          <table class="w-full mt-5" id="kisMeretTabla">
             <tr>
               <td v-for="number in numbers" :key="number">{{ number }}</td>
             </tr>
@@ -465,30 +474,131 @@ export default {
       return this.calculateGrandTotal() + this.calculateVAT();
     },
     exportToPDF() {
-      const nev = document.getElementById("nev").value;
-      const email = document.getElementById("email").value;
-      const tel = document.getElementById("tel").value;
-      const cegnev = document.getElementById("cegnev").value;
-      const varos = document.getElementById("varos").value;
-      const cim = document.getElementById("cim").value;
-      const ado = document.getElementById("ado").value;
+  const element = document.getElementById("element-to-convert");
 
-      const rightColumnData = `<p>Név: ${nev}</p><p>Email: ${email}</p><p>Telefonszám: ${tel}</p>`;
+  const originalTransform = element.style.transform;
+  const originalTransformOrigin = element.style.transformOrigin;
 
-      const leftColumnData = `<p>Cégnév: ${cegnev}</p><p>Város: ${varos}</p><p>Cím: ${cim}</p><p>Adószám: ${ado}</p>`;
+  const tableCells = document.querySelectorAll("table td");
+  const tableCellsTh = document.querySelectorAll("table th");
+  const tableInputs = document.querySelectorAll("table input");
 
-      document.querySelector(".left-column").innerHTML = leftColumnData;
-      document.querySelector(".right-column").innerHTML = rightColumnData;
-      html2pdf(document.getElementById("element-to-convert"), {
-        margin: 1,
-        filename: "integram-ruha-" + Date.now() + ".pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
-      }).then(() => {
-        document.getElementById("form-data").innerHTML = "";
-      });
-    },
+  const originalPadding = [];
+  const originalPaddingTh = [];
+  const originalInputPadding = [];
+
+  tableCells.forEach((cell, index) => {
+    originalPadding[index] = cell.style.padding;
+    cell.style.padding = "0px 5px 12px 5px";
+  });
+
+  tableCellsTh.forEach((cell, index) => {
+    originalPaddingTh[index] = cell.style.padding;
+    cell.style.padding = "0px 5px 12px 5px";
+  });
+
+  tableInputs.forEach((input, index) => {
+    originalInputPadding[index] = input.style.padding;
+  });
+
+  const inputSpanPairs = [];
+
+  tableInputs.forEach((input) => {
+    const value = input.value.trim();
+
+    if (value) {
+      const span = document.createElement("span"); 
+      span.textContent = value; 
+      span.style.display = "inline-block"; 
+      span.style.width = input.offsetWidth + "px"; 
+      span.style.height = input.offsetHeight + "px"; 
+      input.style.display = "none"; 
+      input.parentNode.insertBefore(span, input); 
+
+      inputSpanPairs.push({ input, span });
+    }
+  });
+
+
+  element.style.transform = "scaleY(0.8)";
+  element.style.transformOrigin = "top center";
+
+  const nev = document.getElementById("nev").value;
+  const email = document.getElementById("email").value;
+  const tel = document.getElementById("tel").value;
+  const cegnev = document.getElementById("cegnev").value;
+  const varos = document.getElementById("varos").value;
+  const cim = document.getElementById("cim").value;
+  const ado = document.getElementById("ado").value;
+
+  const rightColumnData = `<p>Név: ${nev}</p><p>Email: ${email}</p><p>Telefonszám: ${tel}</p>`;
+  const leftColumnData = `<p>Cégnév: ${cegnev}</p><p>Város: ${varos}</p><p>Cím: ${cim}</p><p>Adószám: ${ado}</p>`;
+
+  document.querySelector(".left-column").innerHTML = leftColumnData;
+  document.querySelector(".right-column").innerHTML = rightColumnData;
+
+  const rightC = document.querySelectorAll(".right-column p");
+  const leftC = document.querySelectorAll(".left-column p");
+
+  const originalPaddingRight = [];
+  const originalPaddingLeft = [];
+
+  rightC.forEach((cell, index) => {
+    originalPaddingRight[index] = cell.style.padding;
+    cell.style.padding = "0px 5px 12px 5px";
+    cell.style.border = "1px solid black";
+    cell.style.marginBottom = "3px";
+    cell.style.borderRadius = "15px";
+  });
+
+  leftC.forEach((cell, index) => {
+    originalPaddingLeft[index] = cell.style.padding;
+    cell.style.padding = "0px 5px 12px 5px";
+    cell.style.border = "1px solid grey";
+    cell.style.marginBottom = "3px";
+    cell.style.borderRadius = "15px";
+  });
+
+  html2pdf(document.getElementById("element-to-convert"), {
+    margin: 1,
+    filename: "integram-ruha-" + Date.now() + ".pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 6 },
+    jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+  }).then(() => {
+    
+    element.style.transform = originalTransform;
+    element.style.transformOrigin = originalTransformOrigin;
+
+    tableCells.forEach((cell, index) => {
+      cell.style.padding = originalPadding[index];
+    });
+
+    tableCellsTh.forEach((cell, index) => {
+      cell.style.padding = originalPaddingTh[index];
+    });
+
+    tableInputs.forEach((input, index) => {
+      input.style.padding = originalInputPadding[index];
+    });
+
+    rightC.forEach((cell, index) => {
+      cell.style.padding = originalPaddingRight[index];
+    });
+
+    leftC.forEach((cell, index) => {
+      cell.style.padding = originalPaddingLeft[index];
+    });
+    inputSpanPairs.forEach(({ input, span }) => {
+      input.style.display = "block"; 
+      input.value = span.textContent; 
+      span.remove(); 
+    });
+
+    document.getElementById("form-data").innerHTML = "";
+  });
+},
+
   },
   mounted() {
     for (let i = 39; i <= 50; i++) {
@@ -574,20 +684,29 @@ thead {
   background-color: skyblue;
 }
 
+#meretTabla tbody tr:nth-child(14) td {
+  background-color: skyblue;
+}
+
 #meretTabla tbody tr:nth-child(15) input {
   background-color: lightgray;
 }
 
-#kisMeretTabla tr:nth-child(1) {
+#meretTabla tbody tr:nth-child(15) td {
+  background-color: lightgray;
+}
+
+#kisMeretTabla tr:nth-child(1) td {
   background-color: skyblue;
 }
 
-#kisMeretTabla tr:nth-child(2) {
+#kisMeretTabla tr:nth-child(2) td{
   background-color: lightgray;
 }
 
 #kisMeretTabla td {
   border: 1px solid black;
+  border-radius: 5px;
 }
 
 .elsotablak input {
