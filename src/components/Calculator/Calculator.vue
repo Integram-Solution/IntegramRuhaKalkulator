@@ -1,33 +1,33 @@
 <template>
   <div class="calculator-container flex flex-col">
-    <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1">
-      <div>
-        <label for="nev">Név</label><br />
-        <input class="border" type="text" name="nev" id="nev" />
+    <div class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
+      <div class="px-2">
+        <div>
+          <label for="cegnev">Cégnév</label><br />
+          <input class="border w-full rounded-xl" type="text" name="cegnev" id="cegnev" />
+        </div>
+        <div>
+          <label for="cim">Cím</label><br />
+          <input class="border w-full rounded-xl" type="text" name="cim" id="cim" />
+        </div>
+        <div>
+          <label for="ado">Adószám</label><br />
+          <input class="border w-full rounded-xl" type="text" name="ado" id="ado" />
+        </div>
       </div>
-      <div>
-        <label for="tel">Telefonszám</label><br />
-        <input class="border" type="tel" name="tel" id="tel" />
-      </div>
-      <div>
-        <label for="email">E-mail</label><br />
-        <input class="border" type="email" name="email" id="email" />
-      </div>
-      <div>
-        <label for="cegnev">Cégnév</label><br />
-        <input class="border" type="text" name="cegnev" id="cegnev" />
-      </div>
-      <div>
-        <label for="varos">Város</label><br />
-        <input class="border" type="text" name="varos" id="varos" />
-      </div>
-      <div>
-        <label for="cim">Cím</label><br />
-        <input class="border" type="text" name="cim" id="cim" />
-      </div>
-      <div>
-        <label for="ado">Adószám</label><br />
-        <input class="border" type="text" name="ado" id="ado" />
+      <div class="px-2">
+        <div>
+          <label for="nev">Név</label><br />
+          <input class="border w-full rounded-xl" type="text" name="nev" id="nev" />
+        </div>
+        <div>
+          <label for="tel">Telefonszám</label><br />
+          <input class="border w-full rounded-xl" type="tel" name="tel" id="tel" />
+        </div>
+        <div>
+          <label for="email">E-mail</label><br />
+          <input class="border w-full rounded-xl" type="email" name="email" id="email" />
+        </div>
       </div>
     </div>
 
@@ -60,7 +60,7 @@
                     class="table-input"
                   />
                 </td>
-                <td class="w-24">
+                <td class="w-20">
                   <input
                     type="text"
                     :value="formatPriceWithFt(product.unitPrice)"
@@ -79,7 +79,7 @@
             <tr>
               <td></td>
               <td></td>
-              <td class="w-24"><strong>Nettó</strong></td>
+              <td class="w-20"><strong>Nettó</strong></td>
               <td class="w-36">
                 <strong
                   >{{
@@ -474,131 +474,133 @@ export default {
       return this.calculateGrandTotal() + this.calculateVAT();
     },
     exportToPDF() {
-  const element = document.getElementById("element-to-convert");
+      const element = document.getElementById("element-to-convert");
 
-  const originalTransform = element.style.transform;
-  const originalTransformOrigin = element.style.transformOrigin;
+      const originalTransform = element.style.transform;
+      const originalTransformOrigin = element.style.transformOrigin;
 
-  const tableCells = document.querySelectorAll("table td");
-  const tableCellsTh = document.querySelectorAll("table th");
-  const tableInputs = document.querySelectorAll("table input");
+      const tableCells = document.querySelectorAll("table td");
+      const tableCellsTh = document.querySelectorAll("table th");
+      const tableInputs = document.querySelectorAll("table input");
+      const tableFirstCol = document.querySelectorAll(".elsotablak tbody td");
 
-  const originalPadding = [];
-  const originalPaddingTh = [];
-  const originalInputPadding = [];
+      const originalPadding = [];
+      const originalPaddingTh = [];
+      const originalInputPadding = [];
 
-  tableCells.forEach((cell, index) => {
-    originalPadding[index] = cell.style.padding;
-    cell.style.padding = "0px 5px 12px 5px";
-  });
+      // tableFirstCol.forEach((cell, index) => {
+      //   originalPadding[index] = cell.style.padding;
+      //   cell.style.textAlign="left"
+      // });
 
-  tableCellsTh.forEach((cell, index) => {
-    originalPaddingTh[index] = cell.style.padding;
-    cell.style.padding = "0px 5px 12px 5px";
-  });
+      tableCells.forEach((cell, index) => {
+        originalPadding[index] = cell.style.padding;
+        cell.style.padding = "0px 5px 12px 5px";
+      });
 
-  tableInputs.forEach((input, index) => {
-    originalInputPadding[index] = input.style.padding;
-  });
+      tableCellsTh.forEach((cell, index) => {
+        originalPaddingTh[index] = cell.style.padding;
+        cell.style.padding = "0px 5px 12px 5px";
+      });
 
-  const inputSpanPairs = [];
+      tableInputs.forEach((input, index) => {
+        originalInputPadding[index] = input.style.padding;
+      });
 
-  tableInputs.forEach((input) => {
-    const value = input.value.trim();
+      const inputSpanPairs = [];
 
-    if (value) {
-      const span = document.createElement("span"); 
-      span.textContent = value; 
-      span.style.display = "inline-block"; 
-      span.style.width = input.offsetWidth + "px"; 
-      span.style.height = input.offsetHeight + "px"; 
-      input.style.display = "none"; 
-      input.parentNode.insertBefore(span, input); 
+      tableInputs.forEach((input) => {
+        const value = input.value.trim();
 
-      inputSpanPairs.push({ input, span });
-    }
-  });
+        if (value) {
+          const span = document.createElement("span");
+          span.textContent = value;
+          span.style.display = "inline-block";
+          span.style.width = input.offsetWidth + "px";
+          span.style.height = input.offsetHeight + "px";
+          input.style.display = "none";
+          input.parentNode.insertBefore(span, input);
 
+          inputSpanPairs.push({ input, span });
+        }
+      });
 
-  element.style.transform = "scaleY(0.8)";
-  element.style.transformOrigin = "top center";
+      element.style.transform = "scaleY(0.8)";
+      element.style.transformOrigin = "top center";
 
-  const nev = document.getElementById("nev").value;
-  const email = document.getElementById("email").value;
-  const tel = document.getElementById("tel").value;
-  const cegnev = document.getElementById("cegnev").value;
-  const varos = document.getElementById("varos").value;
-  const cim = document.getElementById("cim").value;
-  const ado = document.getElementById("ado").value;
+      const nev = document.getElementById("nev").value;
+      const email = document.getElementById("email").value;
+      const tel = document.getElementById("tel").value;
+      const cegnev = document.getElementById("cegnev").value;
+      const cim = document.getElementById("cim").value;
+      const ado = document.getElementById("ado").value;
 
-  const rightColumnData = `<p>Név: ${nev}</p><p>Email: ${email}</p><p>Telefonszám: ${tel}</p>`;
-  const leftColumnData = `<p>Cégnév: ${cegnev}</p><p>Város: ${varos}</p><p>Cím: ${cim}</p><p>Adószám: ${ado}</p>`;
+      const rightColumnData = `<p>Név: ${nev}</p><p>Email: ${email}</p><p>Telefonszám: ${tel}</p>`;
+      const leftColumnData = `<p>Cégnév: ${cegnev}</p><p>Cím: ${cim}</p><p>Adószám: ${ado}</p>`;
 
-  document.querySelector(".left-column").innerHTML = leftColumnData;
-  document.querySelector(".right-column").innerHTML = rightColumnData;
+      document.querySelector(".left-column").innerHTML = leftColumnData;
+      document.querySelector(".right-column").innerHTML = rightColumnData;
 
-  const rightC = document.querySelectorAll(".right-column p");
-  const leftC = document.querySelectorAll(".left-column p");
+      const rightC = document.querySelectorAll(".right-column p");
+      const leftC = document.querySelectorAll(".left-column p");
 
-  const originalPaddingRight = [];
-  const originalPaddingLeft = [];
+      const originalPaddingRight = [];
+      const originalPaddingLeft = [];
 
-  rightC.forEach((cell, index) => {
-    originalPaddingRight[index] = cell.style.padding;
-    cell.style.padding = "0px 5px 12px 5px";
-    cell.style.border = "1px solid black";
-    cell.style.marginBottom = "3px";
-    cell.style.borderRadius = "15px";
-  });
+      rightC.forEach((cell, index) => {
+        originalPaddingRight[index] = cell.style.padding;
+        cell.style.padding = "0px 5px 12px 5px";
+        cell.style.border = "1px solid black";
+        cell.style.marginBottom = "3px";
+        cell.style.borderRadius = "15px";
+      });
 
-  leftC.forEach((cell, index) => {
-    originalPaddingLeft[index] = cell.style.padding;
-    cell.style.padding = "0px 5px 12px 5px";
-    cell.style.border = "1px solid grey";
-    cell.style.marginBottom = "3px";
-    cell.style.borderRadius = "15px";
-  });
+      leftC.forEach((cell, index) => {
+        originalPaddingLeft[index] = cell.style.padding;
+        cell.style.padding = "0px 5px 12px 5px";
+        cell.style.border = "1px solid grey";
+        cell.style.marginBottom = "3px";
+        cell.style.borderRadius = "15px";
+      });
 
-  html2pdf(document.getElementById("element-to-convert"), {
-    margin: 1,
-    filename: "integram-ruha-" + Date.now() + ".pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 6 },
-    jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
-  }).then(() => {
-    
-    element.style.transform = originalTransform;
-    element.style.transformOrigin = originalTransformOrigin;
+      html2pdf(document.getElementById("element-to-convert"), {
+        margin: 1,
+        filename: "integram-ruha-" + Date.now() + ".pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 6 },
+        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+      }).then(() => {
+        element.style.transform = originalTransform;
+        element.style.transformOrigin = originalTransformOrigin;
 
-    tableCells.forEach((cell, index) => {
-      cell.style.padding = originalPadding[index];
-    });
+        tableCells.forEach((cell, index) => {
+          cell.style.padding = originalPadding[index];
+        });
 
-    tableCellsTh.forEach((cell, index) => {
-      cell.style.padding = originalPaddingTh[index];
-    });
+        tableCellsTh.forEach((cell, index) => {
+          cell.style.padding = originalPaddingTh[index];
+        });
 
-    tableInputs.forEach((input, index) => {
-      input.style.padding = originalInputPadding[index];
-    });
+        tableInputs.forEach((input, index) => {
+          input.style.padding = originalInputPadding[index];
+        });
 
-    rightC.forEach((cell, index) => {
-      cell.style.padding = originalPaddingRight[index];
-    });
+        rightC.forEach((cell, index) => {
+          cell.style.padding = originalPaddingRight[index];
+        });
 
-    leftC.forEach((cell, index) => {
-      cell.style.padding = originalPaddingLeft[index];
-    });
-    inputSpanPairs.forEach(({ input, span }) => {
-      input.style.display = "block"; 
-      input.value = span.textContent; 
-      span.remove(); 
-    });
+        leftC.forEach((cell, index) => {
+          cell.style.padding = originalPaddingLeft[index];
+        });
+        inputSpanPairs.forEach(({ input, span }) => {
+          input.style.display = "block";
+          input.value = span.textContent;
+          span.remove();
+        });
 
-    document.getElementById("form-data").innerHTML = "";
-  });
-},
-
+        document.getElementById("form-data").innerHTML = "";
+      });
+    },
   },
   mounted() {
     for (let i = 39; i <= 50; i++) {
@@ -614,6 +616,10 @@ export default {
 </script>
 
 <style scoped>
+/* .elsotablak tbody td:nth-child(1){
+  background-color: #4bb543;
+} */
+
 .flex-container {
   display: flex;
   justify-content: space-between;
@@ -622,7 +628,7 @@ export default {
 
 .calculator-container {
   @apply flex bg-white sm:w-8/12 w-11/12 h-auto mx-auto rounded-xl sm:p-8 p-2;
-  margin-top: 10vh;
+  margin-top: 5vh;
   font-family: Helvetica;
 }
 
@@ -700,7 +706,7 @@ thead {
   background-color: skyblue;
 }
 
-#kisMeretTabla tr:nth-child(2) td{
+#kisMeretTabla tr:nth-child(2) td {
   background-color: lightgray;
 }
 
