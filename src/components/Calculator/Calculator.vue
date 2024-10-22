@@ -454,7 +454,7 @@ export default {
     formatPriceWithFt(value) {
       if (!value) return "";
       const number = parseFloat(value);
-      return number.toLocaleString("hu-HU") + " Ft";
+      return number.toLocaleString("en-HU") + " Ft";
     },
     updatePrice(event, index) {
       const rawValue = event.target.value
