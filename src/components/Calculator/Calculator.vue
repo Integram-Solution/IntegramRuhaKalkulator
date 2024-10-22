@@ -4,7 +4,7 @@
       <div class="flex items-center justify-center order-1 lg:order-3">
         <img
           class="lg:w-11/12 w-4/12"
-          src="/public/assets/images/IHS.png"
+          src="/public/IHS.png"
           alt=""
         />
       </div>
@@ -712,7 +712,7 @@ export default {
 
       const kepDiv = document.querySelector(".kep");
       const logo = document.createElement("img");
-      logo.src = "/public/assets/images/IHS.png";
+      logo.src = "/public/IHS.png";
       logo.alt = "Logo";
       logo.style.width = "100%";
       logo.style.maxWidth = "200px";
