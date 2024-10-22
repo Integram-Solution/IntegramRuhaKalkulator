@@ -648,9 +648,6 @@ export default {
 </script>
 
 <style scoped>
-/* .elsotablak tbody td:nth-child(1){
-  background-color: #4bb543;
-} */
 .custom-cols {
   grid-template-columns: 2fr 1fr; 
 }
