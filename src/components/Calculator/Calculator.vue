@@ -860,7 +860,6 @@ export default {
 
 .calculator-container {
   @apply flex bg-white sm:w-8/12 w-11/12 h-auto mx-auto rounded-xl sm:p-8 p-2;
-  margin-top: 3vh;
   font-family: Helvetica;
 }
 
