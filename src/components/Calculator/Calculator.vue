@@ -62,7 +62,7 @@
     </div>
 
     <div id="element-to-convert">
-      <div id="form-data" class="flex-container">
+      <div id="form-data" class="grid grid-cols-2">
         <div class="left-column">
           <!-- Bal oldali adatok -->
         </div>
@@ -559,7 +559,7 @@ export default {
         }
       });
 
-      element.style.transform = "scale(0.9)";
+      element.style.transform = "scale(0.8)";
       element.style.transformOrigin = "top center";
 
       const nev = document.getElementById("nev").value;
@@ -569,34 +569,71 @@ export default {
       const cim = document.getElementById("cim").value;
       const ado = document.getElementById("ado").value;
 
-      const rightColumnData = `<p>Név: ${nev}</p><p>Email: ${email}</p><p>Telefonszám: ${tel}</p>`;
-      const leftColumnData = `<p>Cégnév: ${cegnev}</p><p>Cím: ${cim}</p><p>Adószám: ${ado}</p>`;
+      const rightColumnData = `
+  <p>Név:<br><span class="full-width">${nev}</span></p>
+  <p>Email:<br><span class="full-width">${email}</span></p>
+  <p>Telefonszám:<br><span class="full-width">${tel}</span></p>
+`;
+      const leftColumnData = `
+  <p>Cégnév:<br><span class="full-width">${cegnev}</span></p>
+  <p>Cím:<br><span class="full-width">${cim}</span></p>
+  <p>Adószám:<br><span class="full-width">${ado}</span></p>
+`;
 
       document.querySelector(".left-column").innerHTML = leftColumnData;
       document.querySelector(".right-column").innerHTML = rightColumnData;
 
-      const rightC = document.querySelectorAll(".right-column p");
-      const leftC = document.querySelectorAll(".left-column p");
+      const rightC = document.querySelectorAll(".right-column span");
+      const leftC = document.querySelectorAll(".left-column span");
 
-      const originalPaddingRight = [];
-      const originalPaddingLeft = [];
-
-      rightC.forEach((cell, index) => {
-        originalPaddingRight[index] = cell.style.padding;
-        cell.style.padding = "0px 5px 12px 5px";
-        cell.style.border = "1px solid black";
-        cell.style.marginBottom = "3px";
+      rightC.forEach((cell) => {
+        cell.style.padding = "0px 5px 15px 5px";
+        cell.style.border = "1px solid lightgrey";
         cell.style.borderRadius = "15px";
+        cell.style.display = "block";
+        cell.style.width = "100%";
+        cell.style.marginTop = "6px";
+        cell.style.minHeight = "40px";
       });
 
-      leftC.forEach((cell, index) => {
-        originalPaddingLeft[index] = cell.style.padding;
-        cell.style.padding = "0px 5px 12px 5px";
-        cell.style.border = "1px solid grey";
-        cell.style.marginBottom = "3px";
+      leftC.forEach((cell) => {
+        cell.style.padding = "0px 5px 15px 5px";
+        cell.style.border = "1px solid lightgrey";
         cell.style.borderRadius = "15px";
+        cell.style.display = "block";
+        cell.style.width = "95%";
+        cell.style.marginTop = "6px";
+        cell.style.minHeight = "40px";
       });
 
+      const rightCP = document.querySelectorAll(".right-column p ");
+      const leftCP = document.querySelectorAll(".left-column p");
+
+      rightCP.forEach((cell) => {
+        cell.style.marginBottom = "3px";
+      });
+
+      leftCP.forEach((cell) => {
+        cell.style.marginBottom = "3px";
+      });
+
+      const inputs = document.querySelectorAll(".masodiktablak span");
+
+      const originalPaddingInputs = [];
+
+      inputs.forEach((input, index) => {
+        originalPaddingInputs[index] = input.style.paddingRight; 
+
+        const value = parseInt(input.textContent, 10); 
+
+        if (value > 99) {
+          input.style.paddingRight = "23px";
+        } else if (value > 9) {
+          input.style.paddingRight = "15px"; 
+        } else {
+          input.style.paddingRight = "0px"; 
+        }
+      });
       html2pdf()
         .from(element)
         .set({
@@ -626,6 +663,10 @@ export default {
             span.remove();
           });
 
+          inputs.forEach((input, index) => {
+            input.style.padding = originalPaddingInputs[index];
+          });
+
           document.querySelector(".left-column").innerHTML = "";
           document.querySelector(".right-column").innerHTML = "";
 
@@ -648,19 +689,17 @@ export default {
 </script>
 
 <style scoped>
-.custom-cols {
-  grid-template-columns: 2fr 1fr; 
+#form-data {
+  font-family: Helvetica;
 }
 
-.flex-container {
-  display: flex;
-  justify-content: space-between;
-  font-family: Helvetica;
+.custom-cols {
+  grid-template-columns: 2fr 1fr;
 }
 
 .calculator-container {
   @apply flex bg-white sm:w-8/12 w-11/12 h-auto mx-auto rounded-xl sm:p-8 p-2;
-  margin-top: 5vh;
+  margin-top: 3vh;
   font-family: Helvetica;
 }
 
