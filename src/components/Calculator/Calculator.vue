@@ -4,29 +4,59 @@
       <div class="px-2">
         <div>
           <label for="cegnev">Cégnév</label><br />
-          <input class="border w-full rounded-xl" type="text" name="cegnev" id="cegnev" />
+          <input
+            class="border w-full rounded-xl"
+            type="text"
+            name="cegnev"
+            id="cegnev"
+          />
         </div>
         <div>
           <label for="cim">Cím</label><br />
-          <input class="border w-full rounded-xl" type="text" name="cim" id="cim" />
+          <input
+            class="border w-full rounded-xl"
+            type="text"
+            name="cim"
+            id="cim"
+          />
         </div>
         <div>
           <label for="ado">Adószám</label><br />
-          <input class="border w-full rounded-xl" type="text" name="ado" id="ado" />
+          <input
+            class="border w-full rounded-xl"
+            type="text"
+            name="ado"
+            id="ado"
+          />
         </div>
       </div>
       <div class="px-2">
         <div>
           <label for="nev">Név</label><br />
-          <input class="border w-full rounded-xl" type="text" name="nev" id="nev" />
+          <input
+            class="border w-full rounded-xl"
+            type="text"
+            name="nev"
+            id="nev"
+          />
         </div>
         <div>
           <label for="tel">Telefonszám</label><br />
-          <input class="border w-full rounded-xl" type="tel" name="tel" id="tel" />
+          <input
+            class="border w-full rounded-xl"
+            type="tel"
+            name="tel"
+            id="tel"
+          />
         </div>
         <div>
           <label for="email">E-mail</label><br />
-          <input class="border w-full rounded-xl" type="email" name="email" id="email" />
+          <input
+            class="border w-full rounded-xl"
+            type="email"
+            name="email"
+            id="email"
+          />
         </div>
       </div>
     </div>
@@ -46,9 +76,9 @@
             <thead>
               <tr>
                 <th>Termék</th>
-                <th>Egységár</th>
-                <th>db</th>
-                <th>Összesen</th>
+                <th class="w-1/5">Egységár</th>
+                <th class="w-1/12">db</th>
+                <th class="w-1/5">Összesen</th>
               </tr>
             </thead>
             <tbody>
@@ -60,16 +90,18 @@
                     class="table-input"
                   />
                 </td>
-                <td class="w-20">
+                <td>
                   <input
                     type="text"
-                    :value="formatPriceWithFt(product.unitPrice)"
+                    :value="formattedPrices[index]"
                     @input="updatePrice($event, index)"
+                    @blur="formatPrice($event, index)"
                     class="table-input"
                   />
                 </td>
-                <td class="w-12">{{ calculateTotalQuantity(index) }}</td>
-                <td class="w-24">
+
+                <td>{{ calculateTotalQuantity(index) }}</td>
+                <td>
                   {{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft
                 </td>
               </tr>
@@ -79,8 +111,8 @@
             <tr>
               <td></td>
               <td></td>
-              <td class="w-20"><strong>Nettó</strong></td>
-              <td class="w-36">
+              <td class="w-1/5"><strong>Nettó</strong></td>
+              <td class="w-2/4">
                 <strong
                   >{{
                     formatNumberWithSeparator(calculateGrandTotal())
@@ -248,6 +280,7 @@ export default {
         { name: "Ing", unitPrice: null },
         { name: "Cipő", unitPrice: null },
       ],
+      formattedPrices: [],
       sizeRows: [
         {
           s: "",
@@ -421,18 +454,26 @@ export default {
     formatPriceWithFt(value) {
       if (!value) return "";
       const number = parseFloat(value);
-
       return number.toLocaleString("hu-HU") + " Ft";
     },
     updatePrice(event, index) {
       const rawValue = event.target.value
+        .replace(/\s/g, "")
         .replace(/\./g, "")
         .replace(/,/g, ".")
         .replace(" Ft", "");
+
       if (!isNaN(rawValue) && rawValue !== "") {
         this.products[index].unitPrice = parseFloat(rawValue);
+        this.formattedPrices[index] = rawValue;
       } else {
         this.products[index].unitPrice = 0;
+      }
+    },
+    formatPrice(event, index) {
+      const value = this.products[index].unitPrice;
+      if (value !== 0) {
+        this.formattedPrices[index] = this.formatPriceWithFt(value);
       }
     },
     calculateTotalQuantity(index) {
@@ -464,7 +505,7 @@ export default {
       return this.roundToNearestFive(vat);
     },
     formatNumberWithSeparator(value) {
-      return value.toLocaleString("hu-HU");
+      return value.toLocaleString("en-HU");
     },
 
     roundToNearestFive(value) {
@@ -474,54 +515,54 @@ export default {
       return this.calculateGrandTotal() + this.calculateVAT();
     },
     exportToPDF() {
-  const element = document.getElementById("element-to-convert");
+      const element = document.getElementById("element-to-convert");
 
-  const originalTransform = element.style.transform;
-  const originalTransformOrigin = element.style.transformOrigin;
+      const originalTransform = element.style.transform;
+      const originalTransformOrigin = element.style.transformOrigin;
 
-  const tableCells = document.querySelectorAll("table td");
-  const tableCellsTh = document.querySelectorAll("table th");
-  const tableInputs = document.querySelectorAll("table input");
+      const tableCells = document.querySelectorAll("table td");
+      const tableCellsTh = document.querySelectorAll("table th");
+      const tableInputs = document.querySelectorAll("table input");
 
-  const originalPadding = [];
-  const originalPaddingTh = [];
-  const originalInputPadding = [];
+      const originalPadding = [];
+      const originalPaddingTh = [];
+      const originalInputPadding = [];
 
-  tableCells.forEach((cell, index) => {
-    originalPadding[index] = cell.style.padding;
-    cell.style.padding = "0px 5px 12px 5px";
-  });
+      tableCells.forEach((cell, index) => {
+        originalPadding[index] = cell.style.padding;
+        cell.style.padding = "0px 5px 12px 5px";
+      });
 
-  tableCellsTh.forEach((cell, index) => {
-    originalPaddingTh[index] = cell.style.padding;
-    cell.style.padding = "0px 5px 12px 5px";
-  });
+      tableCellsTh.forEach((cell, index) => {
+        originalPaddingTh[index] = cell.style.padding;
+        cell.style.padding = "0px 5px 12px 5px";
+      });
 
-  tableInputs.forEach((input, index) => {
-    originalInputPadding[index] = input.style.padding;
-  });
+      tableInputs.forEach((input, index) => {
+        originalInputPadding[index] = input.style.padding;
+      });
 
-  const inputSpanPairs = [];
-  tableInputs.forEach((input) => {
-    const value = input.value.trim();
+      const inputSpanPairs = [];
+      tableInputs.forEach((input) => {
+        const value = input.value.trim();
 
-    if (value) {
-      const span = document.createElement("span");
-      span.textContent = value;
-      span.style.display = "inline-block";
-      span.style.width = input.offsetWidth + "px";
-      span.style.height = input.offsetHeight + "px";
-      input.style.display = "none";
-      input.parentNode.insertBefore(span, input);
+        if (value) {
+          const span = document.createElement("span");
+          span.textContent = value;
+          span.style.display = "inline-block";
+          span.style.width = input.offsetWidth + "px";
+          span.style.height = input.offsetHeight + "px";
+          input.style.display = "none";
+          input.parentNode.insertBefore(span, input);
 
-      inputSpanPairs.push({ input, span });
-    }
-  });
+          inputSpanPairs.push({ input, span });
+        }
+      });
 
-  element.style.transform = "scaleY(0.8)";
-  element.style.transformOrigin = "top center";
+      element.style.transform = "scale(0.9)";
+      element.style.transformOrigin = "top center";
 
-  const nev = document.getElementById("nev").value;
+      const nev = document.getElementById("nev").value;
       const email = document.getElementById("email").value;
       const tel = document.getElementById("tel").value;
       const cegnev = document.getElementById("cegnev").value;
@@ -556,43 +597,42 @@ export default {
         cell.style.borderRadius = "15px";
       });
 
-  html2pdf()
-    .from(element)
-    .set({
-      margin: 1,
-      filename: "integram-ruha-" + Date.now() + ".pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 6 },
-      jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
-    })
-    .save()
-    .then(() => {
+      html2pdf()
+        .from(element)
+        .set({
+          margin: [0.3, 0, 0, 0],
+          filename: "integram-ruha-" + Date.now() + ".pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 6 },
+          jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+        })
+        .save()
+        .then(() => {
+          tableCells.forEach((cell, index) => {
+            cell.style.padding = originalPadding[index];
+          });
 
-      tableCells.forEach((cell, index) => {
-        cell.style.padding = originalPadding[index];
-      });
+          tableCellsTh.forEach((cell, index) => {
+            cell.style.padding = originalPaddingTh[index];
+          });
 
-      tableCellsTh.forEach((cell, index) => {
-        cell.style.padding = originalPaddingTh[index];
-      });
+          tableInputs.forEach((input, index) => {
+            input.style.padding = originalInputPadding[index];
+          });
 
-      tableInputs.forEach((input, index) => {
-        input.style.padding = originalInputPadding[index];
-      });
+          inputSpanPairs.forEach(({ input, span }) => {
+            input.style.display = "block";
+            input.value = span.textContent;
+            span.remove();
+          });
 
-      inputSpanPairs.forEach(({ input, span }) => {
-        input.style.display = "block";
-        input.value = span.textContent;
-        span.remove();
-      });
+          document.querySelector(".left-column").innerHTML = "";
+          document.querySelector(".right-column").innerHTML = "";
 
-      document.querySelector(".left-column").innerHTML = "";
-      document.querySelector(".right-column").innerHTML = "";
-
-      element.style.transform = originalTransform;
-      element.style.transformOrigin = originalTransformOrigin;
-    });
-}
+          element.style.transform = originalTransform;
+          element.style.transformOrigin = originalTransformOrigin;
+        });
+    },
   },
   mounted() {
     for (let i = 39; i <= 50; i++) {
@@ -672,6 +712,14 @@ table {
 #seged {
   width: 100%;
   table-layout: auto;
+}
+
+#seged td {
+  height: 24px;
+}
+
+#meretTabla td {
+  height: 24px;
 }
 
 thead {
