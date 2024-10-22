@@ -70,7 +70,7 @@
           <!-- Jobb oldali adatok -->
         </div>
       </div>
-      <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+      <div class="grid custom-cols lg:grid-cols-2 grid-cols-1 gap-5">
         <div>
           <table class="elsotablak mt-6" id="seged">
             <thead>
@@ -651,6 +651,9 @@ export default {
 /* .elsotablak tbody td:nth-child(1){
   background-color: #4bb543;
 } */
+.custom-cols {
+  grid-template-columns: 2fr 1fr; 
+}
 
 .flex-container {
   display: flex;
@@ -665,7 +668,7 @@ export default {
 }
 
 .elsotablak td {
-  border: 1px solid gray;
+  border: 1px solid lightgray;
   border-radius: 15px;
 }
 
@@ -680,7 +683,7 @@ export default {
 }
 
 .masodiktablak td {
-  border: 1px solid grey;
+  border: 1px solid lightgray;
   border-radius: 5px;
 }
 
@@ -696,7 +699,7 @@ button {
   padding: 0 5px 0 5px;
 }
 
-#osszegTabla tr td:nth-child(3) {
+#osszegTabla tr td {
   border: solid 1px black;
 }
 
