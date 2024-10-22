@@ -474,61 +474,54 @@ export default {
       return this.calculateGrandTotal() + this.calculateVAT();
     },
     exportToPDF() {
-      const element = document.getElementById("element-to-convert");
+  const element = document.getElementById("element-to-convert");
 
-      const originalTransform = element.style.transform;
-      const originalTransformOrigin = element.style.transformOrigin;
+  const originalTransform = element.style.transform;
+  const originalTransformOrigin = element.style.transformOrigin;
 
-      const tableCells = document.querySelectorAll("table td");
-      const tableCellsTh = document.querySelectorAll("table th");
-      const tableInputs = document.querySelectorAll("table input");
-      const tableFirstCol = document.querySelectorAll(".elsotablak tbody td");
+  const tableCells = document.querySelectorAll("table td");
+  const tableCellsTh = document.querySelectorAll("table th");
+  const tableInputs = document.querySelectorAll("table input");
 
-      const originalPadding = [];
-      const originalPaddingTh = [];
-      const originalInputPadding = [];
+  const originalPadding = [];
+  const originalPaddingTh = [];
+  const originalInputPadding = [];
 
-      // tableFirstCol.forEach((cell, index) => {
-      //   originalPadding[index] = cell.style.padding;
-      //   cell.style.textAlign="left"
-      // });
+  tableCells.forEach((cell, index) => {
+    originalPadding[index] = cell.style.padding;
+    cell.style.padding = "0px 5px 12px 5px";
+  });
 
-      tableCells.forEach((cell, index) => {
-        originalPadding[index] = cell.style.padding;
-        cell.style.padding = "0px 5px 12px 5px";
-      });
+  tableCellsTh.forEach((cell, index) => {
+    originalPaddingTh[index] = cell.style.padding;
+    cell.style.padding = "0px 5px 12px 5px";
+  });
 
-      tableCellsTh.forEach((cell, index) => {
-        originalPaddingTh[index] = cell.style.padding;
-        cell.style.padding = "0px 5px 12px 5px";
-      });
+  tableInputs.forEach((input, index) => {
+    originalInputPadding[index] = input.style.padding;
+  });
 
-      tableInputs.forEach((input, index) => {
-        originalInputPadding[index] = input.style.padding;
-      });
+  const inputSpanPairs = [];
+  tableInputs.forEach((input) => {
+    const value = input.value.trim();
 
-      const inputSpanPairs = [];
+    if (value) {
+      const span = document.createElement("span");
+      span.textContent = value;
+      span.style.display = "inline-block";
+      span.style.width = input.offsetWidth + "px";
+      span.style.height = input.offsetHeight + "px";
+      input.style.display = "none";
+      input.parentNode.insertBefore(span, input);
 
-      tableInputs.forEach((input) => {
-        const value = input.value.trim();
+      inputSpanPairs.push({ input, span });
+    }
+  });
 
-        if (value) {
-          const span = document.createElement("span");
-          span.textContent = value;
-          span.style.display = "inline-block";
-          span.style.width = input.offsetWidth + "px";
-          span.style.height = input.offsetHeight + "px";
-          input.style.display = "none";
-          input.parentNode.insertBefore(span, input);
+  element.style.transform = "scaleY(0.8)";
+  element.style.transformOrigin = "top center";
 
-          inputSpanPairs.push({ input, span });
-        }
-      });
-
-      element.style.transform = "scaleY(0.8)";
-      element.style.transformOrigin = "top center";
-
-      const nev = document.getElementById("nev").value;
+  const nev = document.getElementById("nev").value;
       const email = document.getElementById("email").value;
       const tel = document.getElementById("tel").value;
       const cegnev = document.getElementById("cegnev").value;
@@ -563,44 +556,43 @@ export default {
         cell.style.borderRadius = "15px";
       });
 
-      html2pdf(document.getElementById("element-to-convert"), {
-        margin: 1,
-        filename: "integram-ruha-" + Date.now() + ".pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 6 },
-        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
-      }).then(() => {
-        element.style.transform = originalTransform;
-        element.style.transformOrigin = originalTransformOrigin;
+  html2pdf()
+    .from(element)
+    .set({
+      margin: 1,
+      filename: "integram-ruha-" + Date.now() + ".pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 6 },
+      jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+    })
+    .save()
+    .then(() => {
 
-        tableCells.forEach((cell, index) => {
-          cell.style.padding = originalPadding[index];
-        });
-
-        tableCellsTh.forEach((cell, index) => {
-          cell.style.padding = originalPaddingTh[index];
-        });
-
-        tableInputs.forEach((input, index) => {
-          input.style.padding = originalInputPadding[index];
-        });
-
-        rightC.forEach((cell, index) => {
-          cell.style.padding = originalPaddingRight[index];
-        });
-
-        leftC.forEach((cell, index) => {
-          cell.style.padding = originalPaddingLeft[index];
-        });
-        inputSpanPairs.forEach(({ input, span }) => {
-          input.style.display = "block";
-          input.value = span.textContent;
-          span.remove();
-        });
-
-        document.getElementById("form-data").innerHTML = "";
+      tableCells.forEach((cell, index) => {
+        cell.style.padding = originalPadding[index];
       });
-    },
+
+      tableCellsTh.forEach((cell, index) => {
+        cell.style.padding = originalPaddingTh[index];
+      });
+
+      tableInputs.forEach((input, index) => {
+        input.style.padding = originalInputPadding[index];
+      });
+
+      inputSpanPairs.forEach(({ input, span }) => {
+        input.style.display = "block";
+        input.value = span.textContent;
+        span.remove();
+      });
+
+      document.querySelector(".left-column").innerHTML = "";
+      document.querySelector(".right-column").innerHTML = "";
+
+      element.style.transform = originalTransform;
+      element.style.transformOrigin = originalTransformOrigin;
+    });
+}
   },
   mounted() {
     for (let i = 39; i <= 50; i++) {
