@@ -1,73 +1,129 @@
 <template>
   <div class="calculator-container flex flex-col">
-    <div class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
-      <div class="px-2">
-        <div>
-          <label for="cegnev">Cégnév</label><br />
-          <input
-            class="border w-full rounded-xl"
-            type="text"
-            name="cegnev"
-            id="cegnev"
-          />
-        </div>
-        <div>
-          <label for="cim">Cím</label><br />
-          <input
-            class="border w-full rounded-xl"
-            type="text"
-            name="cim"
-            id="cim"
-          />
-        </div>
-        <div>
-          <label for="ado">Adószám</label><br />
-          <input
-            class="border w-full rounded-xl"
-            type="text"
-            name="ado"
-            id="ado"
-          />
-        </div>
+    <div class="grid form-grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1">
+      <div class="flex items-center justify-center order-1 lg:order-3">
+        <img
+          class="lg:w-8/12 w-4/12"
+          src="/public/assets/images/IHS.png"
+          alt=""
+        />
       </div>
-      <div class="px-2">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 order-2 lg:order-1">
         <div>
-          <label for="nev">Név</label><br />
-          <input
-            class="border w-full rounded-xl"
-            type="text"
-            name="nev"
-            id="nev"
-          />
+          <div>
+            <label for="cegnev">Cégnév</label><br />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="cegnev"
+              id="cegnev"
+              v-model="form.cegnev"
+              :class="{ 'input-error': errors.cegnev }"
+              @input="checkInputs"
+              @blur="validateInput('cegnev')"
+            />
+          </div>
+          <div>
+            <label for="cim">Cím</label><br />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="cim"
+              id="cim"
+              v-model="form.cim"
+              :class="{ 'input-error': errors.cim }"
+              @input="checkInputs"
+              @blur="validateInput('cim')"
+            />
+          </div>
+          <div>
+            <label for="ado">Adószám</label><br />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="ado"
+              id="ado"
+              v-model="form.ado"
+              :class="{ 'input-error': errors.ado }"
+              @input="checkInputs"
+              @blur="validateInput('ado')"
+            />
+          </div>
         </div>
         <div>
-          <label for="tel">Telefonszám</label><br />
-          <input
-            class="border w-full rounded-xl"
-            type="tel"
-            name="tel"
-            id="tel"
-          />
-        </div>
-        <div>
-          <label for="email">E-mail</label><br />
-          <input
-            class="border w-full rounded-xl"
-            type="email"
-            name="email"
-            id="email"
-          />
+          <div>
+            <label for="nev">Név</label><br />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="nev"
+              id="nev"
+              v-model="form.nev"
+              :class="{ 'input-error': errors.nev }"
+              @input="checkInputs"
+              @blur="validateInput('nev')"
+            />
+          </div>
+          <div>
+            <label for="tel">Telefonszám</label><br />
+            <input
+              class="border w-full rounded-xl"
+              type="tel"
+              name="tel"
+              id="tel"
+              v-model="form.tel"
+              :class="{ 'input-error': errors.tel }"
+              @input="checkInputs"
+              @blur="validateInput('tel')"
+            />
+          </div>
+          <div>
+            <label for="email">E-mail</label><br />
+            <input
+              class="border w-full rounded-xl"
+              type="email"
+              name="email"
+              id="email"
+              v-model="form.email"
+              :class="{ 'input-error': errors.email }"
+              @input="checkInputs"
+              @blur="validateInput('email')"
+            />
+          </div>
         </div>
       </div>
     </div>
 
+    <div class="mt-2">
+      <input
+        class="mr-2"
+        type="checkbox"
+        name="megjegyzesElso"
+        id="megjegyzesElso"
+        checked
+      />
+      <label class="text-xs" for="megjegyzesElso">Első megjegyzés</label><br />
+      <input
+        class="mr-2"
+        type="checkbox"
+        name="megjegyzesMasodik"
+        id="megjegyzesMasodik"
+        checked
+      />
+      <label class="text-xs" for="megjegyzesMasodik">Második megjegyzés</label>
+    </div>
+
     <div id="element-to-convert">
-      <div id="form-data" class="grid grid-cols-2">
+      <div id="form-data" class="grid grid-cols-3">
         <div class="left-column">
           <!-- Bal oldali adatok -->
         </div>
-        <div class="right-column">
+        <div class="right-column ">
           <!-- Jobb oldali adatok -->
+        </div>
+        <div class="kep flex justify-content-center align-items-center">
+          <!-- kep -->
         </div>
       </div>
       <div class="grid custom-cols lg:grid-cols-2 grid-cols-1 gap-5">
@@ -88,18 +144,20 @@
                     type="text"
                     v-model="product.name"
                     class="table-input"
+                    :readonly="!inputsFilled"
+                    @focus="highlightEmptyInputs"
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    :value="formattedPrices[index]"
+                    v-model="product.unitPrice"
                     @input="updatePrice($event, index)"
-                    @blur="formatPrice($event, index)"
                     class="table-input"
+                    :readonly="!inputsFilled"
+                    @focus="highlightEmptyInputs"
                   />
                 </td>
-
                 <td>{{ calculateTotalQuantity(index) }}</td>
                 <td>
                   {{ formatNumberWithSeparator(calculateTotalPrice(index)) }} Ft
@@ -112,7 +170,7 @@
               <td></td>
               <td></td>
               <td class="w-1/5"><strong>Nettó</strong></td>
-              <td class="w-2/4">
+              <td class="w-44">
                 <strong
                   >{{
                     formatNumberWithSeparator(calculateGrandTotal())
@@ -160,6 +218,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.s"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -170,6 +230,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.s"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -178,6 +240,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.m"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -186,6 +250,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.l"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -194,6 +260,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.xl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -202,6 +270,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.xxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -210,6 +280,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.xxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -218,6 +290,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.xxxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -226,6 +300,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.xxxxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -234,6 +310,8 @@
                       class="table-input"
                       type="number"
                       v-model="sizes.xxxxxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
                       min="0"
                     />
                   </td>
@@ -261,6 +339,23 @@ import html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
+      form: {
+        cegnev: "",
+        cim: "",
+        ado: "",
+        nev: "",
+        tel: "",
+        email: "",
+      },
+      inputsFilled: false,
+      errors: {
+        cegnev: false,
+        cim: false,
+        ado: false,
+        nev: false,
+        tel: false,
+        email: false,
+      },
       numbers: [],
       numbers2: [],
       products: [
@@ -451,6 +546,41 @@ export default {
     };
   },
   methods: {
+    checkInputs() {
+      this.inputsFilled =
+        this.form.cegnev !== "" &&
+        this.form.cim !== "" &&
+        this.form.ado !== "" &&
+        this.form.nev !== "" &&
+        this.form.tel !== "" &&
+        this.form.email !== "";
+    },
+    validateInput(field) {
+      if (!this.form[field]) {
+        this.errors[field] = true;
+      } else {
+        this.errors[field] = false;
+      }
+      this.checkInputs();
+    },
+    clearError(field) {
+      this.errors[field] = false;
+    },
+    highlightEmptyInputs() {
+      Object.keys(this.form).forEach((field) => {
+        if (!this.form[field]) {
+          this.errors[field] = true;
+        }
+      });
+    },
+    clearErrors() {
+      this.errors.cegnev = false;
+      this.errors.cim = false;
+      this.errors.ado = false;
+      this.errors.nev = false;
+      this.errors.tel = false;
+      this.errors.email = false;
+    },
     formatPriceWithFt(value) {
       if (!value) return "";
       const number = parseFloat(value);
@@ -580,6 +710,15 @@ export default {
   <p>Adószám:<br><span class="full-width">${ado}</span></p>
 `;
 
+      const kepDiv = document.querySelector(".kep");
+      const logo = document.createElement("img");
+      logo.src = "/public/assets/images/IHS.png";
+      logo.alt = "Logo";
+      logo.style.width = "100%";
+      logo.style.maxWidth = "150px";
+      logo.style.margin = "auto";
+      kepDiv.appendChild(logo);
+
       document.querySelector(".left-column").innerHTML = leftColumnData;
       document.querySelector(".right-column").innerHTML = rightColumnData;
 
@@ -601,7 +740,7 @@ export default {
         cell.style.border = "1px solid lightgrey";
         cell.style.borderRadius = "15px";
         cell.style.display = "block";
-        cell.style.width = "95%";
+        cell.style.width = "100%";
         cell.style.marginTop = "6px";
         cell.style.minHeight = "40px";
       });
@@ -611,6 +750,7 @@ export default {
 
       rightCP.forEach((cell) => {
         cell.style.marginBottom = "3px";
+        cell.style.paddingLeft = "20px";
       });
 
       leftCP.forEach((cell) => {
@@ -622,18 +762,20 @@ export default {
       const originalPaddingInputs = [];
 
       inputs.forEach((input, index) => {
-        originalPaddingInputs[index] = input.style.paddingRight; 
+        originalPaddingInputs[index] = input.style.paddingRight;
 
-        const value = parseInt(input.textContent, 10); 
+        const value = parseInt(input.textContent, 10);
 
         if (value > 99) {
           input.style.paddingRight = "23px";
         } else if (value > 9) {
-          input.style.paddingRight = "15px"; 
+          input.style.paddingRight = "15px";
         } else {
-          input.style.paddingRight = "0px"; 
+          input.style.paddingRight = "0px";
         }
       });
+      const formData = document.getElementById("form-data");
+      formData.style.gridTemplateColumns = "2fr 2fr 1fr";
       html2pdf()
         .from(element)
         .set({
@@ -670,6 +812,8 @@ export default {
           document.querySelector(".left-column").innerHTML = "";
           document.querySelector(".right-column").innerHTML = "";
 
+          kepDiv.removeChild(logo);
+
           element.style.transform = originalTransform;
           element.style.transformOrigin = originalTransformOrigin;
         });
@@ -689,12 +833,29 @@ export default {
 </script>
 
 <style scoped>
+.input-error {
+  border: 2px solid #e3342f;
+  box-shadow: 0 0 5px 2px rgba(227, 52, 47, 0.2);
+}
+
 #form-data {
   font-family: Helvetica;
 }
 
 .custom-cols {
   grid-template-columns: 2fr 1fr;
+}
+
+@media (min-width: 1024px) {
+  .form-grid {
+    grid-template-columns: 5fr 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .custom-cols {
+    grid-template-columns: 1fr;
+  }
 }
 
 .calculator-container {
