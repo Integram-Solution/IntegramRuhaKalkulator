@@ -119,7 +119,7 @@
         <div class="left-column">
           <!-- Bal oldali adatok -->
         </div>
-        <div class="right-column ">
+        <div class="right-column">
           <!-- Jobb oldali adatok -->
         </div>
         <div class="kep flex justify-content-center align-items-center">
@@ -776,6 +776,9 @@ export default {
       });
       const formData = document.getElementById("form-data");
       formData.style.gridTemplateColumns = "2fr 2fr 1fr";
+
+      const originalMaxHeight = element.style.maxHeight;
+      element.style.maxHeight = "20.5cm";
       html2pdf()
         .from(element)
         .set({
@@ -814,6 +817,8 @@ export default {
 
           kepDiv.removeChild(logo);
 
+          element.style.maxHeight = originalMaxHeight;
+
           element.style.transform = originalTransform;
           element.style.transformOrigin = originalTransformOrigin;
         });
@@ -833,9 +838,6 @@ export default {
 </script>
 
 <style scoped>
-#element-to-convert {
-  max-height: 20.5cm; 
-}
 .input-error {
   border: 2px solid #e3342f;
   box-shadow: 0 0 5px 2px rgba(227, 52, 47, 0.2);
