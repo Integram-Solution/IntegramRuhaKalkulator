@@ -55,7 +55,7 @@
           <div>
             <label for="nev">Név</label><br />
             <input
-              class="border w-full rounded-xl"
+              class="border lg:w-9/12 w-full rounded-xl"
               type="text"
               name="nev"
               id="nev"
@@ -68,7 +68,7 @@
           <div>
             <label for="tel">Telefonszám</label><br />
             <input
-              class="border w-full rounded-xl"
+              class="border lg:w-9/12 w-full rounded-xl"
               type="tel"
               name="tel"
               id="tel"
@@ -81,7 +81,7 @@
           <div>
             <label for="email">E-mail</label><br />
             <input
-              class="border w-full rounded-xl"
+              class="border lg:w-9/12 w-full rounded-xl"
               type="email"
               name="email"
               id="email"
@@ -730,7 +730,7 @@ export default {
         cell.style.border = "1px solid lightgrey";
         cell.style.borderRadius = "15px";
         cell.style.display = "block";
-        cell.style.width = "100%";
+        cell.style.width = "85%";
         cell.style.marginTop = "6px";
         cell.style.minHeight = "40px";
       });
