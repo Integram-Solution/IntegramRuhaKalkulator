@@ -3,7 +3,7 @@
     <div class="grid form-grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1">
       <div class="flex items-center justify-center order-1 lg:order-3">
         <img
-          class="lg:w-8/12 w-4/12"
+          class="lg:w-11/12 w-4/12"
           src="/public/assets/images/IHS.png"
           alt=""
         />
@@ -715,7 +715,7 @@ export default {
       logo.src = "/public/assets/images/IHS.png";
       logo.alt = "Logo";
       logo.style.width = "100%";
-      logo.style.maxWidth = "150px";
+      logo.style.maxWidth = "200px";
       logo.style.margin = "auto";
       kepDiv.appendChild(logo);
 
@@ -833,6 +833,9 @@ export default {
 </script>
 
 <style scoped>
+#element-to-convert {
+  max-height: 20.5cm; 
+}
 .input-error {
   border: 2px solid #e3342f;
   box-shadow: 0 0 5px 2px rgba(227, 52, 47, 0.2);
