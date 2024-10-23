@@ -1,6 +1,5 @@
 <script setup>
 import Calculator from "./components/Calculator/Calculator.vue";
-console.log("test");
 </script>
 
 <template>

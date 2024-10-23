@@ -2,7 +2,7 @@
   <div class="calculator-container flex flex-col">
     <div class="grid form-grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1">
       <div class="flex items-center justify-center order-1 lg:order-3">
-        <img class="lg:w-11/12 w-4/12" :src="`${publicPath}/IHS.png`" alt="" />
+        <LogoImage/>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 order-2 lg:order-1">
@@ -199,10 +199,13 @@
 
 <script>
 import html2pdf from "html2pdf.js";
+import LogoImage from "./Logo.vue";
 export default {
+  components: {
+    LogoImage
+  },
   data() {
     return {
-      publicPath: window.location.href,
       form: {
         cegnev: "",
         cim: "",
