@@ -2,115 +2,51 @@
   <div class="calculator-container flex flex-col">
     <div class="grid form-grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1">
       <div class="flex items-center justify-center order-1 lg:order-3">
-        <img
-          class="lg:w-11/12 w-4/12"
-          src="/public/IHS.png"
-          alt=""
-        />
+        <img class="lg:w-11/12 w-4/12" :src="`${publicPath}/IHS.png`" alt="" />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 order-2 lg:order-1">
         <div>
           <div>
             <label for="cegnev">Cégnév</label><br />
-            <input
-              class="border w-full rounded-xl"
-              type="text"
-              name="cegnev"
-              id="cegnev"
-              v-model="form.cegnev"
-              :class="{ 'input-error': errors.cegnev }"
-              @input="checkInputs"
-              @blur="validateInput('cegnev')"
-            />
+            <input class="border w-full rounded-xl" type="text" name="cegnev" id="cegnev" v-model="form.cegnev"
+              :class="{ 'input-error': errors.cegnev }" @input="checkInputs" @blur="validateInput('cegnev')" />
           </div>
           <div>
             <label for="cim">Cím</label><br />
-            <input
-              class="border w-full rounded-xl"
-              type="text"
-              name="cim"
-              id="cim"
-              v-model="form.cim"
-              :class="{ 'input-error': errors.cim }"
-              @input="checkInputs"
-              @blur="validateInput('cim')"
-            />
+            <input class="border w-full rounded-xl" type="text" name="cim" id="cim" v-model="form.cim"
+              :class="{ 'input-error': errors.cim }" @input="checkInputs" @blur="validateInput('cim')" />
           </div>
           <div>
             <label for="ado">Adószám</label><br />
-            <input
-              class="border w-full rounded-xl"
-              type="text"
-              name="ado"
-              id="ado"
-              v-model="form.ado"
-              :class="{ 'input-error': errors.ado }"
-              @input="checkInputs"
-              @blur="validateInput('ado')"
-            />
+            <input class="border w-full rounded-xl" type="text" name="ado" id="ado" v-model="form.ado"
+              :class="{ 'input-error': errors.ado }" @input="checkInputs" @blur="validateInput('ado')" />
           </div>
         </div>
         <div>
           <div>
             <label for="nev">Név</label><br />
-            <input
-              class="border lg:w-9/12 w-full rounded-xl"
-              type="text"
-              name="nev"
-              id="nev"
-              v-model="form.nev"
-              :class="{ 'input-error': errors.nev }"
-              @input="checkInputs"
-              @blur="validateInput('nev')"
-            />
+            <input class="border lg:w-9/12 w-full rounded-xl" type="text" name="nev" id="nev" v-model="form.nev"
+              :class="{ 'input-error': errors.nev }" @input="checkInputs" @blur="validateInput('nev')" />
           </div>
           <div>
             <label for="tel">Telefonszám</label><br />
-            <input
-              class="border lg:w-9/12 w-full rounded-xl"
-              type="tel"
-              name="tel"
-              id="tel"
-              v-model="form.tel"
-              :class="{ 'input-error': errors.tel }"
-              @input="checkInputs"
-              @blur="validateInput('tel')"
-            />
+            <input class="border lg:w-9/12 w-full rounded-xl" type="tel" name="tel" id="tel" v-model="form.tel"
+              :class="{ 'input-error': errors.tel }" @input="checkInputs" @blur="validateInput('tel')" />
           </div>
           <div>
             <label for="email">E-mail</label><br />
-            <input
-              class="border lg:w-9/12 w-full rounded-xl"
-              type="email"
-              name="email"
-              id="email"
-              v-model="form.email"
-              :class="{ 'input-error': errors.email }"
-              @input="checkInputs"
-              @blur="validateInput('email')"
-            />
+            <input class="border lg:w-9/12 w-full rounded-xl" type="email" name="email" id="email" v-model="form.email"
+              :class="{ 'input-error': errors.email }" @input="checkInputs" @blur="validateInput('email')" />
           </div>
         </div>
       </div>
     </div>
 
     <div class="mt-2">
-      <input
-        class="mr-2"
-        type="checkbox"
-        name="megjegyzesElso"
-        id="megjegyzesElso"
-        checked
-      />
+      <input class="mr-2" type="checkbox" name="megjegyzesElso" id="megjegyzesElso" checked />
       <label class="text-xs" for="megjegyzesElso">Első megjegyzés</label><br />
-      <input
-        class="mr-2"
-        type="checkbox"
-        name="megjegyzesMasodik"
-        id="megjegyzesMasodik"
-        checked
-      />
+      <input class="mr-2" type="checkbox" name="megjegyzesMasodik" id="megjegyzesMasodik" checked />
       <label class="text-xs" for="megjegyzesMasodik">Második megjegyzés</label>
     </div>
 
@@ -140,23 +76,12 @@
             <tbody>
               <tr v-for="(product, index) in products" :key="index">
                 <td>
-                  <input
-                    type="text"
-                    v-model="product.name"
-                    class="table-input"
-                    :readonly="!inputsFilled"
-                    @focus="highlightEmptyInputs"
-                  />
+                  <input type="text" v-model="product.name" class="table-input" :readonly="!inputsFilled"
+                    @focus="highlightEmptyInputs" />
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    v-model="product.unitPrice"
-                    @input="updatePrice($event, index)"
-                    class="table-input"
-                    :readonly="!inputsFilled"
-                    @focus="highlightEmptyInputs"
-                  />
+                  <input type="text" v-model="product.unitPrice" @input="updatePrice($event, index)" class="table-input"
+                    :readonly="!inputsFilled" @focus="highlightEmptyInputs" />
                 </td>
                 <td>{{ calculateTotalQuantity(index) }}</td>
                 <td>
@@ -171,12 +96,10 @@
               <td></td>
               <td class="w-1/5"><strong>Nettó</strong></td>
               <td class="w-44">
-                <strong
-                  >{{
-                    formatNumberWithSeparator(calculateGrandTotal())
-                  }}
-                  Ft</strong
-                >
+                <strong>{{
+                  formatNumberWithSeparator(calculateGrandTotal())
+                }}
+                  Ft</strong>
               </td>
             </tr>
             <tr>
@@ -214,106 +137,46 @@
               <tr v-for="(sizes, index) in sizeRows" :key="index">
                 <template v-if="index === 11 || index === 12">
                   <td colspan="9">
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.s"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.s" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                 </template>
                 <template v-else>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.s"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.s" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.m"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.m" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.l"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.l" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xl"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.xl" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxl"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.xxl" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxl"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.xxxl" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxxl"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.xxxxl" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxxxl"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.xxxxxl" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                   <td>
-                    <input
-                      class="table-input"
-                      type="number"
-                      v-model="sizes.xxxxxxl"
-                      :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs"
-                      min="0"
-                    />
+                    <input class="table-input" type="number" v-model="sizes.xxxxxxl" :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs" min="0" />
                   </td>
                 </template>
               </tr>
@@ -339,6 +202,7 @@ import html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
+      publicPath: window.location.href,
       form: {
         cegnev: "",
         cim: "",
