@@ -2,51 +2,111 @@
   <div class="calculator-container flex flex-col">
     <div class="grid form-grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1">
       <div class="flex items-center justify-center order-1 lg:order-3">
-        <LogoImage/>
+        <LogoImage />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 order-2 lg:order-1">
         <div>
           <div>
             <label for="cegnev">Cégnév</label><br />
-            <input class="border w-full rounded-xl" type="text" name="cegnev" id="cegnev" v-model="form.cegnev"
-              :class="{ 'input-error': errors.cegnev }" @input="checkInputs" @blur="validateInput('cegnev')" />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="cegnev"
+              id="cegnev"
+              v-model="form.cegnev"
+              :class="{ 'input-error': errors.cegnev }"
+              @input="checkInputs"
+              @blur="validateInput('cegnev')"
+            />
           </div>
           <div>
             <label for="cim">Cím</label><br />
-            <input class="border w-full rounded-xl" type="text" name="cim" id="cim" v-model="form.cim"
-              :class="{ 'input-error': errors.cim }" @input="checkInputs" @blur="validateInput('cim')" />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="cim"
+              id="cim"
+              v-model="form.cim"
+              :class="{ 'input-error': errors.cim }"
+              @input="checkInputs"
+              @blur="validateInput('cim')"
+            />
           </div>
           <div>
             <label for="ado">Adószám</label><br />
-            <input class="border w-full rounded-xl" type="text" name="ado" id="ado" v-model="form.ado"
-              :class="{ 'input-error': errors.ado }" @input="checkInputs" @blur="validateInput('ado')" />
+            <input
+              class="border w-full rounded-xl"
+              type="text"
+              name="ado"
+              id="ado"
+              v-model="form.ado"
+              :class="{ 'input-error': errors.ado }"
+              @input="checkInputs"
+              @blur="validateInput('ado')"
+            />
           </div>
         </div>
         <div>
           <div>
             <label for="nev">Név</label><br />
-            <input class="border lg:w-9/12 w-full rounded-xl" type="text" name="nev" id="nev" v-model="form.nev"
-              :class="{ 'input-error': errors.nev }" @input="checkInputs" @blur="validateInput('nev')" />
+            <input
+              class="border lg:w-9/12 w-full rounded-xl"
+              type="text"
+              name="nev"
+              id="nev"
+              v-model="form.nev"
+              :class="{ 'input-error': errors.nev }"
+              @input="checkInputs"
+              @blur="validateInput('nev')"
+            />
           </div>
           <div>
             <label for="tel">Telefonszám</label><br />
-            <input class="border lg:w-9/12 w-full rounded-xl" type="tel" name="tel" id="tel" v-model="form.tel"
-              :class="{ 'input-error': errors.tel }" @input="checkInputs" @blur="validateInput('tel')" />
+            <input
+              class="border lg:w-9/12 w-full rounded-xl"
+              type="tel"
+              name="tel"
+              id="tel"
+              v-model="form.tel"
+              :class="{ 'input-error': errors.tel }"
+              @input="checkInputs"
+              @blur="validateInput('tel')"
+            />
           </div>
           <div>
             <label for="email">E-mail</label><br />
-            <input class="border lg:w-9/12 w-full rounded-xl" type="email" name="email" id="email" v-model="form.email"
-              :class="{ 'input-error': errors.email }" @input="checkInputs" @blur="validateInput('email')" />
+            <input
+              class="border lg:w-9/12 w-full rounded-xl"
+              type="email"
+              name="email"
+              id="email"
+              v-model="form.email"
+              :class="{ 'input-error': errors.email }"
+              @input="checkInputs"
+              @blur="validateInput('email')"
+            />
           </div>
         </div>
       </div>
     </div>
 
     <div class="mt-2">
-      <input class="mr-2" type="checkbox" name="megjegyzesElso" id="megjegyzesElso" checked />
+      <input
+        class="mr-2"
+        type="checkbox"
+        name="megjegyzesElso"
+        id="megjegyzesElso"
+        checked
+      />
       <label class="text-xs" for="megjegyzesElso">Első megjegyzés</label><br />
-      <input class="mr-2" type="checkbox" name="megjegyzesMasodik" id="megjegyzesMasodik" checked />
+      <input
+        class="mr-2"
+        type="checkbox"
+        name="megjegyzesMasodik"
+        id="megjegyzesMasodik"
+        checked
+      />
       <label class="text-xs" for="megjegyzesMasodik">Második megjegyzés</label>
     </div>
 
@@ -76,12 +136,23 @@
             <tbody>
               <tr v-for="(product, index) in products" :key="index">
                 <td>
-                  <input type="text" v-model="product.name" class="table-input" :readonly="!inputsFilled"
-                    @focus="highlightEmptyInputs" />
+                  <input
+                    type="text"
+                    v-model="product.name"
+                    class="table-input"
+                    :readonly="!inputsFilled"
+                    @focus="highlightEmptyInputs"
+                  />
                 </td>
                 <td>
-                  <input type="text" v-model="product.unitPrice" @input="updatePrice($event, index)" class="table-input"
-                    :readonly="!inputsFilled" @focus="highlightEmptyInputs" />
+                  <input
+                    type="text"
+                    v-model="product.unitPrice"
+                    @input="updatePrice($event, index)"
+                    class="table-input"
+                    :readonly="!inputsFilled"
+                    @focus="highlightEmptyInputs"
+                  />
                 </td>
                 <td>{{ calculateTotalQuantity(index) }}</td>
                 <td>
@@ -96,10 +167,12 @@
               <td></td>
               <td class="w-1/5"><strong>Nettó</strong></td>
               <td class="w-44">
-                <strong>{{
-                  formatNumberWithSeparator(calculateGrandTotal())
-                }}
-                  Ft</strong>
+                <strong
+                  >{{
+                    formatNumberWithSeparator(calculateGrandTotal())
+                  }}
+                  Ft</strong
+                >
               </td>
             </tr>
             <tr>
@@ -137,46 +210,106 @@
               <tr v-for="(sizes, index) in sizeRows" :key="index">
                 <template v-if="index === 11 || index === 12">
                   <td colspan="9">
-                    <input class="table-input" type="number" v-model="sizes.s" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.s"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                 </template>
                 <template v-else>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.s" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.s"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.m" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.m"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.l" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.l"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.xl" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.xxl" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.xxxl" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.xxxxl" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.xxxxxl" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                   <td>
-                    <input class="table-input" type="number" v-model="sizes.xxxxxxl" :readonly="!inputsFilled"
-                      @focus="highlightEmptyInputs" min="0" />
+                    <input
+                      class="table-input"
+                      type="number"
+                      v-model="sizes.xxxxxxl"
+                      :readonly="!inputsFilled"
+                      @focus="highlightEmptyInputs"
+                      min="0"
+                    />
                   </td>
                 </template>
               </tr>
@@ -200,9 +333,10 @@
 <script>
 import html2pdf from "html2pdf.js";
 import LogoImage from "./Logo.vue";
+import emailjs from "emailjs-com";
 export default {
   components: {
-    LogoImage
+    LogoImage,
   },
   data() {
     return {
@@ -567,14 +701,14 @@ export default {
       const ado = document.getElementById("ado").value;
 
       const rightColumnData = `
-  <p>Név:<br><span class="full-width">${nev}</span></p>
-  <p>Email:<br><span class="full-width">${email}</span></p>
-  <p>Telefonszám:<br><span class="full-width">${tel}</span></p>
+<p>Név:<br><span class="full-width">${nev}</span></p>
+<p>Email:<br><span class="full-width">${email}</span></p>
+<p>Telefonszám:<br><span class="full-width">${tel}</span></p>
 `;
       const leftColumnData = `
-  <p>Cégnév:<br><span class="full-width">${cegnev}</span></p>
-  <p>Cím:<br><span class="full-width">${cim}</span></p>
-  <p>Adószám:<br><span class="full-width">${ado}</span></p>
+<p>Cégnév:<br><span class="full-width">${cegnev}</span></p>
+<p>Cím:<br><span class="full-width">${cim}</span></p>
+<p>Adószám:<br><span class="full-width">${ado}</span></p>
 `;
 
       const kepDiv = document.querySelector(".kep");
@@ -646,17 +780,61 @@ export default {
 
       const originalMaxHeight = element.style.maxHeight;
       element.style.maxHeight = "20.5cm";
+
+      // PDF letöltése és e-mail küldés
+      const pdfOptions = {
+        margin: [0.3, 0, 0, 0],
+        filename: "integram-ruha-" + Date.now() + ".pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 6 },
+        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+      };
+
       html2pdf()
         .from(element)
-        .set({
-          margin: [0.3, 0, 0, 0],
-          filename: "integram-ruha-" + Date.now() + ".pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 6 },
-          jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
-        })
-        .save()
-        .then(() => {
+        .set(pdfOptions)
+        .save() // Letöltés
+        .output("datauristring") // E-mailhez szükséges base64
+        .then((pdfUri) => {
+          const base64Pdf = pdfUri.split("base64,")[1]; // Base64 PDF tartalom
+
+          // EmailJS API használata a PDF küldéséhez
+          emailjs
+            .send(
+              "service_xc4os1k",
+              "template_wi5saia",
+              {
+                from_name: this.form.cegnev,       // Cégnév
+                contact_name: this.form.nev,       // Kapcsolattartó neve
+                address: this.form.cim,            // Cím
+                tax_number: this.form.ado,         // Adószám
+                email: this.form.email,            // E-mail cím
+                phone: this.form.tel,              // Telefonszám
+                message: "Csatoltam a PDF dokumentumot.", // Üzenet
+                pdf_attachment: base64Pdf,      
+              },
+              "9NgJH369dU6fVg_3Z"
+            )
+            .then((response) => {
+              alert("PDF sikeresen elküldve e-mailben!");
+            })
+            .catch((error) => {
+              console.error("Hiba történt az e-mail küldése során:", error);
+              alert("Hiba történt az e-mail küldése során.");
+            })
+            .then((response) => {
+              if (response.ok) {
+                alert("PDF elküldve e-mailben!");
+              } else {
+                alert("PDF küldés sikertelen.");
+              }
+            })
+            .catch((error) => {
+              console.error("Hiba történt:", error);
+              alert("Hiba történt a PDF küldése során.");
+            });
+
+          // Visszaállítás az eredeti állapotba
           tableCells.forEach((cell, index) => {
             cell.style.padding = originalPadding[index];
           });
