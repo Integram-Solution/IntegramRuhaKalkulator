@@ -333,7 +333,7 @@
 <script>
 import html2pdf from "html2pdf.js";
 import LogoImage from "./Logo.vue";
-import emailjs from "emailjs-com";
+import axios from "axios"; 
 export default {
   components: {
     LogoImage,
@@ -700,16 +700,16 @@ export default {
       const cim = document.getElementById("cim").value;
       const ado = document.getElementById("ado").value;
 
-      const rightColumnData = `
-<p>Név:<br><span class="full-width">${nev}</span></p>
-<p>Email:<br><span class="full-width">${email}</span></p>
-<p>Telefonszám:<br><span class="full-width">${tel}</span></p>
-`;
-      const leftColumnData = `
-<p>Cégnév:<br><span class="full-width">${cegnev}</span></p>
-<p>Cím:<br><span class="full-width">${cim}</span></p>
-<p>Adószám:<br><span class="full-width">${ado}</span></p>
-`;
+          const rightColumnData = `
+      <p>Név:<br><span class="full-width">${nev}</span></p>
+      <p>Email:<br><span class="full-width">${email}</span></p>
+      <p>Telefonszám:<br><span class="full-width">${tel}</span></p>
+    `;
+          const leftColumnData = `
+      <p>Cégnév:<br><span class="full-width">${cegnev}</span></p>
+      <p>Cím:<br><span class="full-width">${cim}</span></p>
+      <p>Adószám:<br><span class="full-width">${ado}</span></p>
+    `;
 
       const kepDiv = document.querySelector(".kep");
       const logo = document.createElement("img");
@@ -780,61 +780,40 @@ export default {
 
       const originalMaxHeight = element.style.maxHeight;
       element.style.maxHeight = "20.5cm";
-
-      // PDF letöltése és e-mail küldés
-      const pdfOptions = {
-        margin: [0.3, 0, 0, 0],
-        filename: "integram-ruha-" + Date.now() + ".pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 6 },
-        jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
-      };
-
       html2pdf()
         .from(element)
-        .set(pdfOptions)
-        .save() // Letöltés
-        .output("datauristring") // E-mailhez szükséges base64
+        .set({
+          margin: [0.3, 0, 0, 0],
+          filename: "integram-ruha-" + Date.now() + ".pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 6 },
+          jsPDF: { unit: "cm", format: "a4", orientation: "landscape" },
+        })
+        .save()
+        .output("datauristring")
         .then((pdfUri) => {
-          const base64Pdf = pdfUri.split("base64,")[1]; // Base64 PDF tartalom
+          
+          const base64Pdf = pdfUri.split("base64,")[1];
 
-          // EmailJS API használata a PDF küldéséhez
-          emailjs
-            .send(
-              "service_xc4os1k",
-              "template_wi5saia",
-              {
-                from_name: this.form.cegnev,       // Cégnév
-                contact_name: this.form.nev,       // Kapcsolattartó neve
-                address: this.form.cim,            // Cím
-                tax_number: this.form.ado,         // Adószám
-                email: this.form.email,            // E-mail cím
-                phone: this.form.tel,              // Telefonszám
-                message: "Csatoltam a PDF dokumentumot.", // Üzenet
-                pdf_attachment: base64Pdf,      
-              },
-              "9NgJH369dU6fVg_3Z"
-            )
-            .then((response) => {
-              alert("PDF sikeresen elküldve e-mailben!");
+          const formData = {
+            cegnev: this.form.cegnev,
+            cim: this.form.cim,
+            ado: this.form.ado,
+            nev: this.form.nev,
+            tel: this.form.tel,
+            email: this.form.email,
+            pdf_content: base64Pdf,
+          };
+          console.log(formData);
+          axios.post('http://localhost:80/api/integram', formData)
+            .then(response => {
+              alert("Adatok és PDF sikeresen elmentve az adatbázisba!");
             })
-            .catch((error) => {
-              console.error("Hiba történt az e-mail küldése során:", error);
-              alert("Hiba történt az e-mail küldése során.");
-            })
-            .then((response) => {
-              if (response.ok) {
-                alert("PDF elküldve e-mailben!");
-              } else {
-                alert("PDF küldés sikertelen.");
-              }
-            })
-            .catch((error) => {
-              console.error("Hiba történt:", error);
-              alert("Hiba történt a PDF küldése során.");
+            .catch(error => {
+              console.error("Hiba történt az adatok mentésekor:", error);
+              alert("Hiba történt az adatok mentése során.");
             });
 
-          // Visszaállítás az eredeti állapotba
           tableCells.forEach((cell, index) => {
             cell.style.padding = originalPadding[index];
           });
