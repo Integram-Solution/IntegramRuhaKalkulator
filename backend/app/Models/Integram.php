@@ -14,6 +14,7 @@ public $table = "integram";
         'adoszam',
         'nev',
         'tel',
-        'email'
+        'email',
+        'pdf'
     ];
 }

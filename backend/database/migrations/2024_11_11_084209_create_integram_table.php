@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("nev");
             $table->string("tel");
             $table->string("email");
+            $table->longText("pdf");
             $table->timestamps();
         });
     }

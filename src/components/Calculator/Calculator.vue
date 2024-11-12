@@ -798,11 +798,11 @@ export default {
           const formData = {
             cegnev: this.form.cegnev,
             cim: this.form.cim,
-            ado: this.form.ado,
+            adoszam: this.form.ado,
             nev: this.form.nev,
             tel: this.form.tel,
             email: this.form.email,
-            pdf_content: base64Pdf,
+            pdf: base64Pdf
           };
           console.log(formData);
           axios.post('http://localhost:80/api/integram', formData)

@@ -22,7 +22,22 @@ class IntegramController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'cegnev' => 'required|string|max:255',
+            'cim' => 'required|string|max:255',
+            'adoszam' => 'required|string|max:20',
+            'nev' => 'required|string|max:255',
+            'tel' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'pdf' => 'required'
+        ]);
+
+        $integram = Integram::create($validatedData);
+
+        return response()->json([
+            'message' => 'Bejegyzés sikeresen létrehozva!',
+            'data' => $integram
+        ], 201);
     }
 
     /**
