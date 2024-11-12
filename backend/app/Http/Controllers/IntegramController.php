@@ -36,7 +36,7 @@ class IntegramController extends Controller
 
         return response()->json([
             'message' => 'Bejegyzés sikeresen létrehozva!',
-            'data' => $integram
+            'data' => new IntegramResource($integram)
         ], 201);
     }
 
@@ -45,7 +45,8 @@ class IntegramController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $integram = Integram::findOrFail($id);
+        return new IntegramResource($integram);
     }
 
     /**
@@ -53,7 +54,23 @@ class IntegramController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'cegnev' => 'sometimes|required|string|max:255',
+            'cim' => 'sometimes|required|string|max:255',
+            'adoszam' => 'sometimes|required|string|max:20',
+            'nev' => 'sometimes|required|string|max:255',
+            'tel' => 'sometimes|required|string|max:20',
+            'email' => 'sometimes|required|email|max:255',
+            'pdf' => 'sometimes|required'
+        ]);
+
+        $integram = Integram::findOrFail($id);
+        $integram->update($validatedData);
+
+        return response()->json([
+            'message' => 'Bejegyzés sikeresen frissítve!',
+            'data' => new IntegramResource($integram)
+        ]);
     }
 
     /**
@@ -61,6 +78,11 @@ class IntegramController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $integram = Integram::findOrFail($id);
+        $integram->delete();
+
+        return response()->json([
+            'message' => 'Bejegyzés sikeresen törölve!'
+        ]);
     }
 }
